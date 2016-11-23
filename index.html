@@ -13,6 +13,7 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -31,8 +32,21 @@
                         <a href="#">Contact</a>
                     </li>
                     <li>
-                        <div class="pull-right">
-                            <a>Login/Register</a>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mymodal">Login/Register</button>
+                        <div class="modal fade" id="mymodal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div clas="modal-header">
+                                        <h3>Please Login/Register</h3>
+                                    </div>
+                                    <div clas="modal-body">
+                                        <p>Form goes in here</p>
+                                    </div>
+                                    <div clas="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Login</button>
+                                    </div>
+                                </div> 
+                            </div>
                         </div>
                     </li>
                 </ul>
