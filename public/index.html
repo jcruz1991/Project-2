@@ -1,0 +1,353 @@
+<html>
+
+<head>
+    <title>Project 2</title>
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/homepage.css">
+
+   
+
+</head>
+
+<body>
+    <div class="ui visible sidebar inverted vertical menu">
+                <div class="item">
+                    <img class="ui avatar image left floated" src="http://semantic-ui.com/images/avatar2/small/rachel.png">
+                    <div class="right floated content">
+                      <div class="large userHeader header"></div>
+                    </div>
+                </div>
+                <a class="addItem item">
+                    <!-- <div class="ui left  icon input"> -->
+                        <i class="left floated add circle icon"></i>
+                        <div class="right floated content">
+                            <div class="large header">Create a listing</div>
+                        </div>
+                    <!-- </div> -->
+                </a>
+                <a class="logout item">
+                    <i class="left floated log out icon"></i>
+                        <div class="right floated content">
+                            <div class="large header">Log Out</div>
+                        </div>
+                </a>
+            </div>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Sell-It-Live</a>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                        
+                       <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mymodal">Login/Register</button> -->
+                        <!-- <div class="modal fade" id="mymodal">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div clas="modal-header">
+                                        <h3>Please Login/Register</h3>
+                                    </div>
+                                    <div clas="modal-body">
+                                        <p>Form goes in here</p>
+                                    </div>
+                                    <div clas="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Login</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                </ul>
+                <div class="ui right floated container">
+                            <div class="right right_menu1 menu">
+                                <div class="item">
+                                    <div class="ui buttons">
+                                        <div class="ui signup blue button">
+                                            <div class="ui left icon a">
+                                                <i class="add user icon"></i>Sign Up               
+                                            </div>
+                                        </div>
+                                        <div class="or"></div>
+                                        <div class="ui login green button">
+                                            <div class="ui left icon a">
+                                                <i class="sign in icon"></i>Log In
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="right right_menu2 menu">
+                                <div class="item">
+                                    <div class="ui left labeled button" tabindex="0">
+                                        <a class="ui basic right pointing label"></a>
+                                        <div class="ui red logout button">
+                                            <i class="log out icon"></i>Log Out
+                                        </div>
+                                        <span class="userId"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="left right_menu3 menu">
+                                <div class="item">
+                                    <div class="ui black profile button">
+                                        My Profile
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+            </div>
+            
+            <div class="ui signup_modal small modal">
+                        <div class="ui gray tertiary form_seg segment">
+                        <h2 class="ui header">First things first, let's sign up!</h2>
+                        <div class="info message"></div>
+                            <form class="ui signup_form form">
+                            <!-- <div class="ui gray tertiary form_seg segment"> -->
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    <input type="text" name="uname" placeholder="Enter User Name ">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="mail icon"></i>
+                                    <input type="text" name="email" placeholder="Enter Email Address ">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="privacy icon"></i>
+                                    <input type="password" name="pwd1" placeholder="Enter Password ">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="privacy icon"></i>
+                                    <input type="password" name="pwd2" placeholder="Confirm Password ">
+                                </div>
+                            </div>
+                            <!-- <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="chck">
+                                    <label>I agree to the terms and conditions.
+                                    </label>
+                                </div>
+                            </div> -->
+                            <div class="field">
+                                <div class="ui blue submit button">
+                                    <i class="add user icon"></i>Sign Up
+                                </div>
+                            </div>   
+                            <div class="field"> Already have an account?
+                                <a class="login">Log In</a> 
+                            </div>    
+                            <div class="ui error message"></div>  
+                            <!-- </div> -->
+                            <div class="result"></div>
+                        </form>
+                    </div> 
+
+                </div>  <!--end signup modal -->
+                  <div class="ui login_modal small modal">
+                    <div class="ui gray tertiary form_seg segment">
+                    <h2 class="ui header">log in to your account</h2>
+                    <div class="info message"></div>
+                    <form class="ui login_form form">
+                        <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="user icon"></i>
+                                    <input type="text" name="ulname" placeholder="Enter User Name ">
+                                </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="privacy icon"></i>
+                                <input type="password" name="pwd" placeholder="Enter Password ">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui blue submit button">
+                                <i class="sign in icon"></i>Log in
+                            </div>
+                        </div>   
+                        <div class="field"> Don't have an account?
+                            <a class="signup">Sign up</a> 
+                        </div>    
+                        <div class="ui error message"></div> 
+                        <div class="result2"></div> 
+                    </form> 
+                </div>
+                </div> <!--end login modal-->
+                <div class="ui small additem_modal modal">
+                    <div class="ui gray tertiary form_seg segment">
+                        <div class="info message"></div>
+                        <form class="ui additem_form form">
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="shop icon"></i>
+                                    <input type="text" name="itemname" placeholder="Enter Name of the product">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui left icon input">
+                                    <i class="dollar icon"></i>
+                                    <input type="text" name="itemprice" placeholder="Enter Price for the product">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label>Product Description</label>
+                                <textarea class="itemDescription" rows="3" placeholder="Enter description for product"></textarea>
+                            </div>
+                            <div class="field">
+                                  <select name="listingType" class="ui dropdown selectType">
+                                      <option value="">Type of Listing</option>
+                                      <option value="buy">Buy</option>
+                                      <option value="sell">Sell</option>
+                                    </select>
+                            </div>
+                            <!-- <div class="field">
+                                <label for="file" class="ui icon button">
+                                    <i class="file icon"></i>
+                                    Upload File</label>
+                                <input type="file" id="file" style="display:none">
+                            </div> -->
+                            <div class="field">
+                                <div class="ui blue submit button">
+                                    <i class="add square icon"></i>Add
+                                </div>
+                            </div>       
+                            <div class="ui error message"></div> 
+                            <div class="result3"></div> 
+                        </form>
+                    </div>
+                </div> <!-- end add item modal -->
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="row">
+                    <h1>Welcome to CSUF Sell-It-Live</h1>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/320x150" alt="">
+                            <div class="caption">
+                                <h4 class="pull-right">$24.99</h4>
+                                <h4><a href="#">First Product</a>
+                                </h4>
+                                <p>Product Description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/320x150" alt="">
+                            <div class="caption">
+                                <h4 class="pull-right">$49.99</h4>
+                                <h4><a href="#">Second Product</a>
+                                </h4>
+                                <p>Product Description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/320x150" alt="">
+                            <div class="caption">
+                                <h4 class="pull-right">$69.99</h4>
+                                <h4><a href="#">Third Product</a>
+                                </h4>
+                                <p>Product Description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/320x150" alt="">
+                            <div class="caption">
+                                <h4 class="pull-right">$99.99</h4>
+                                <h4><a href="#">Fourth Product</a>
+                                </h4>
+                                <p>Product Description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/320x150" alt="">
+                            <div class="caption">
+                                <h4 class="pull-right">$19.99</h4>
+                                <h4><a href="#">Fifth Product</a>
+                                </h4>
+                                <p>Product Description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/320x150" alt="">
+                            <div class="caption">
+                                <h4 class="pull-right">$109.99</h4>
+                                <h4><a href="#">Sixth Product</a>
+                                </h4>
+                                <p>Product Description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="container">
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Sell-It-Live 2016</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+     <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="semantic/dist/semantic.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <script src="javascripts/app.js"></script>
+</body>
+
+</html>
