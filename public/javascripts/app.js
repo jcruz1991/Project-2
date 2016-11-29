@@ -134,7 +134,68 @@ var callAddItemFunction = function() {
   }); //end ajax
 }; //end function
 
+/**
+ * Displays all movies in user's list, for logged in user
+ * Input- user id in JSON format as argument jsonStr
+ * Output- on success, returns movie information as data 
+ * with upvotes and downvotes  
+ */
+var callShowListingsFor1User = function(jsonStr){
+ 'use strict';
+  // $('.movie_seg').empty();
+  $.ajax({
+          type: 'POST',
+          data: jsonStr,
+          dataType: 'json',
+          contentType: 'application/json',
+          url: 'http://localhost:3000/showListingsFor1User',            
+          success: function(data) {
+                                  console.log('success');
+                                  console.log(jsonStr);
+                                  console.log(JSON.stringify(data));
+                                  console.log(data);
+                                  if(data.error){
+                                    console.log('error');
+                                  }
+                                  else{
+                                    console.log(data.itemList.length);
+                                    if(true){
+                                      for(var i=0;i < data.itemList.length;i++)
+                                        {
+                                          console.log(data.itemList[i]);
+                                          
+                                      } //end for
+                                    }//end if
+                                  }//end else
+          } //end success
+  }); //end ajax
+}; //end function
+
+/**
+ * Displays all posted listings
+ * Input- None
+ * Output- on success, returns listing information as data 
+ */
+var callShowAllListingsFunction =function () {
+  'use strict';
+  console.log('in ajax get');
+  $.ajax({
+          type: 'GET',
+          dataType: 'json',
+          contentType: 'application/json',
+          url: 'http://localhost:3000/ShowAll',            
+          success: function(data) {
+                          console.log('success');
+                          console.log(JSON.stringify(data));
+                          console.log(data);
+                          // addMovieToHtml(data);
+          } //end success
+  }); //end ajax
+}; //end function
+
 var main = function(){
+
+	callShowAllListingsFunction();
    
    socket.on('newUser', function(userData) {
      // append to user list?
@@ -150,11 +211,17 @@ var main = function(){
 
     $('.right_menu2').hide();
     $('.right_menu1').show();
+    $('.ui.sidebar').sidebar('toggle');
+    $('.userHeader').text('');
     // $('.login_seg').hide();
     // $('.main_seg').show();
     $('span.userId').empty();
     // $('.right_menu3').hide();
 
+  });
+
+  $('.profile').click(function(){
+    $('.ui.sidebar').sidebar('toggle');
   });
 
 	$('.addItem').click(function(){
@@ -163,6 +230,13 @@ var main = function(){
     	$('.selectType').dropdown();
 
 	});
+
+	$('.viewListing').click(function(){
+    var userID = $('span.userId').text();
+    var jsonStr = JSON.stringify({'userID': userID});
+    callShowListingsFor1User(jsonStr);
+    // $('.movie_seg').show();
+  });
 
 	$('.signup').click(function () {
     $('.result').empty();

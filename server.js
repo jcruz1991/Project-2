@@ -209,3 +209,41 @@ app.post('/additems', function(req, res){
 				}); //end find() function
 			// } //end outer else
 }); //end post
+
+/**
+ * Route for functionality to display all listings for 1 logged-in user 
+ * 
+ */
+app.post('/showListingsFor1User', function(req,res) {
+	console.log('in get all listings for 1 user');
+	UserDb.findOne({_id: req.body.userID}).exec(function(err, user){
+		ItemDb.find({mUserId:user._id},{itemName:1,itemPrice:1,itemDescription:1,itemType:1, _id:0},function(err, items) {
+		    if (err) {
+		      console.log('error while showing listings for 1 user');
+		      res.json('error while showing listings for 1 user');
+		    } else {
+		      console.log(items);
+		      res.json({'username':req.body.username1, 'userid':user._id, 'itemList':items});
+		    }
+		}); //end find
+	}); //end findOne
+}); //end post
+
+/**
+ * Route for functionality to display all listings on home page
+ * 
+ */
+app.get('/ShowAll', function(req,res) {
+	console.log('in get all listings');
+	ItemDb.find({},{itemName:1, _id:0, itemPrice: 1, itemDescription: 1}, function(err, items) {
+	    if (err) {
+	      console.log('error while getting listing');
+	      res.json('error while getting listing');
+	    } 
+	    else {
+	      console.log(items);
+	      // var movieIndex = movies[Math.floor(Math.random()*movies.length)]; //Function to get one random movie from the database at a time
+	      res.json(items);
+	    }
+	}); //end find
+}); //end get
