@@ -12,6 +12,9 @@
  * Input- Username, Email address, password
  * Output- on success, returns JSON message that user is added successfully.
  */
+
+// this variable is required for socket.io
+var socket = io.connect('');
 var callSignUpFunction = function(){
   'use strict';
   var uname = document.getElementsByName('uname')[0].value;
@@ -61,13 +64,18 @@ var callLogInFunction = function(){
                                 console.log('success');
                                 console.log(jsonStr);
                                 console.log(JSON.stringify(data));
-                                console.log(data);
+                                
 
                                 if(data.error){
                                   $('.result2').html(data.error);
                                   $('.login_form').trigger('reset');
                                 }
                                 else{  //successful log in
+
+                                  //emit new user logged in
+                                  console.log('in here bby');
+                                  socket.emit('newUser', data.userid);
+
                                   $('.result2').html(data);
                                   $('.login_form').trigger('reset');
                                   $('.login_modal').modal('hide');
@@ -127,6 +135,12 @@ var callAddItemFunction = function() {
 }; //end function
 
 var main = function(){
+   
+   socket.on('newUser', function(userData) {
+     // append to user list?
+     // need to add user list
+     console.log('user id received on clients:' + userData);
+   })
 
 	$('.right_menu2').hide();
     $('.right_menu1').show();
@@ -265,6 +279,7 @@ var main = function(){
       console.log('form valid');  
     } //end onSuccess
   }); //end signup form validation
+
   $('.additem_form').form({
     // $('.result3').html();
     fields: {

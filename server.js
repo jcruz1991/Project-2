@@ -29,10 +29,17 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+
+// variables for the app + socket.io
+var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+var port = process.env.PORT || 3000;
 // var request = require('request');
 
 mongoose.connect('mongodb://localhost/Project2');
 mongoose.set('debug', true);
+
 
 var userSchema = new mongoose.Schema({  
 	userName: String,
@@ -51,14 +58,39 @@ var itemSchema = new mongoose.Schema({
 var UserDb = mongoose.model('user', userSchema); 
 var ItemDb = mongoose.model('item', itemSchema);
 
-var app = express();
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
 app.use("/", express.static("public"));
 
-console.log('server side, listening at port 3000');
+server.listen(port, function() {
+  console.log('Server listening on port 3000.');  
+});
+
+io.on('connection', function(socket){
+	console.log('Not signed up user connected');
+
+	// user has logged on
+	socket.on('newUser', function(userId) {
+		// write out on server side the user
+		console.log('Logged inuser ID received on server : ' + userId);
+		
+		// emit new user to all clients
+		//
+		// PLEASE NOTE:
+		// will probably have to change this to emit the list of 
+		// items that this user has in their list in order to
+		// display it to the other people wanting to buy something
+		// from someone who is already logged in
+		io.emit('newUser', userId);
+	});
+
+	// socket.on('newItem', function(itemData) {
+	// 	// tell everyone there's a new item from a logged in user
+	// });
+});
 
 /**
  * Route for signup functionality for first-time user
@@ -177,5 +209,3 @@ app.post('/additems', function(req, res){
 				}); //end find() function
 			// } //end outer else
 }); //end post
-
-app.listen(3000);
