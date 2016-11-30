@@ -38,39 +38,16 @@
             </div>
         </a>
     </div>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Sell-It-Live</a>
-            </div>
 
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
 
-                    <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mymodal">Login/Register</button> -->
-                    <!-- <div class="modal fade" id="mymodal">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div clas="modal-header">
-                                        <h3>Please Login/Register</h3>
-                                    </div>
-                                    <div clas="modal-body">
-                                        <p>Form goes in here</p>
-                                    </div>
-                                    <div clas="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Login</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-                </ul>
-                <div class="ui right floated container">
+    <!-- HEADER -->
+    <div class="ui grid">
+        <div class="computer tablet only row">
+            <div class="ui inverted fixed menu navbar page grid">
+                <div class="brand item">Sell-It-Live</div>
+                <a href="" class="item">About</a>
+                <a href="" class="item">Contact</a>
+                <div class="right menu">
                     <div class="right right_menu1 menu">
                         <div class="item">
                             <div class="ui buttons">
@@ -99,146 +76,144 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="left right_menu3 menu">
-                                <div class="item">
-                                    <div class="ui black profile button">
-                                        My Profile
-                                    </div>
-                                </div>
-                            </div> -->
                 </div>
             </div>
-
-            <div class="ui signup_modal small modal">
-                <div class="ui gray tertiary form_seg segment">
-                    <h2 class="ui header">First things first, let's sign up!</h2>
-                    <div class="info message"></div>
-                    <form class="ui signup_form form">
-                        <!-- <div class="ui gray tertiary form_seg segment"> -->
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="user icon"></i>
-                                <input type="text" name="uname" placeholder="Enter User Name ">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="mail icon"></i>
-                                <input type="text" name="email" placeholder="Enter Email Address ">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="privacy icon"></i>
-                                <input type="password" name="pwd1" placeholder="Enter Password ">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="privacy icon"></i>
-                                <input type="password" name="pwd2" placeholder="Confirm Password ">
-                            </div>
-                        </div>
-                        <!-- <div class="field">
-                                <div class="ui checkbox">
-                                    <input type="checkbox" name="chck">
-                                    <label>I agree to the terms and conditions.
-                                    </label>
-                                </div>
-                            </div> -->
-                        <div class="field">
-                            <div class="ui blue submit button">
-                                <i class="add user icon"></i>Sign Up
-                            </div>
-                        </div>
-                        <div class="field"> Already have an account?
-                            <a class="login">Log In</a>
-                        </div>
-                        <div class="ui error message"></div>
-                        <!-- </div> -->
-                        <div class="result"></div>
-                    </form>
-                </div>
-
-            </div>
-            <!--end signup modal -->
-            <div class="ui login_modal small modal">
-                <div class="ui gray tertiary form_seg segment">
-                    <h2 class="ui header">log in to your account</h2>
-                    <div class="info message"></div>
-                    <form class="ui login_form form">
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="user icon"></i>
-                                <input type="text" name="ulname" placeholder="Enter User Name ">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="privacy icon"></i>
-                                <input type="password" name="pwd" placeholder="Enter Password ">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui blue submit button">
-                                <i class="sign in icon"></i>Log in
-                            </div>
-                        </div>
-                        <div class="field"> Don't have an account?
-                            <a class="signup">Sign up</a>
-                        </div>
-                        <div class="ui error message"></div>
-                        <div class="result2"></div>
-                    </form>
-                </div>
-            </div>
-            <!--end login modal-->
-            <div class="ui small additem_modal modal">
-                <div class="ui gray tertiary form_seg segment">
-                    <div class="info message"></div>
-                    <form class="ui additem_form form">
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="shop icon"></i>
-                                <input type="text" name="itemname" placeholder="Enter Name of the product">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui left icon input">
-                                <i class="dollar icon"></i>
-                                <input type="text" name="itemprice" placeholder="Enter Price for the product">
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label>Product Description</label>
-                            <textarea class="itemDescription" rows="3" placeholder="Enter description for product"></textarea>
-                        </div>
-                        <div class="field">
-                            <select name="listingType" class="ui dropdown selectType">
-                                      <option value="">Type of Listing</option>
-                                      <option value="buy">Buy</option>
-                                      <option value="sell">Sell</option>
-                                    </select>
-                        </div>
-                        <!-- <div class="field">
-                                <label for="file" class="ui icon button">
-                                    <i class="file icon"></i>
-                                    Upload File</label>
-                                <input type="file" id="file" style="display:none">
-                            </div> -->
-                        <div class="field">
-                            <div class="ui blue submit button">
-                                <i class="add square icon"></i>Add
-                            </div>
-                        </div>
-                        <div class="ui error message"></div>
-                        <div class="result3"></div>
-                    </form>
-                </div>
-            </div>
-            <!-- end add item modal -->
         </div>
-    </nav>
+    </div>
+    <!-- END OF HEADER -->
+
+    <!-- SIGNUP MODAL -->
+    <div class="ui signup_modal small modal">
+        <div class="ui gray tertiary form_seg segment">
+            <h2 class="ui header">First things first, let's sign up!</h2>
+            <div class="info message"></div>
+            <form class="ui signup_form form">
+                <!-- <div class="ui gray tertiary form_seg segment"> -->
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="uname" placeholder="Enter User Name ">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="mail icon"></i>
+                        <input type="text" name="email" placeholder="Enter Email Address ">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="privacy icon"></i>
+                        <input type="password" name="pwd1" placeholder="Enter Password ">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="privacy icon"></i>
+                        <input type="password" name="pwd2" placeholder="Confirm Password ">
+                    </div>
+                </div>
+                <!-- <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="chck">
+                        <label>I agree to the terms and conditions.
+                        </label>
+                    </div>
+                </div> -->
+                <div class="field">
+                    <div class="ui blue submit button">
+                        <i class="add user icon"></i>Sign Up
+                    </div>
+                </div>
+                <div class="field"> Already have an account?
+                    <a class="login">Log In</a>
+                </div>
+                <div class="ui error message"></div>
+                <!-- </div> -->
+                <div class="result"></div>
+            </form>
+        </div>
+    </div>
+    <!--END OF SIGNUP MODAL -->
+
+    <!-- LOGIN MODAL -->
+    <div class="ui login_modal small modal">
+        <div class="ui gray tertiary form_seg segment">
+            <h2 class="ui header">log in to your account</h2>
+            <div class="info message"></div>
+            <form class="ui login_form form">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="ulname" placeholder="Enter User Name ">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="privacy icon"></i>
+                        <input type="password" name="pwd" placeholder="Enter Password ">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui blue submit button">
+                        <i class="sign in icon"></i>Log in
+                    </div>
+                </div>
+                <div class="field"> Don't have an account?
+                    <a class="signup">Sign up</a>
+                </div>
+                <div class="ui error message"></div>
+                <div class="result2"></div>
+            </form>
+        </div>
+    </div>
+    <!--END LOGIN MODAL-->
+
+    <!-- ADD ITEM MODAL -->
+    <div class="ui small additem_modal modal">
+        <div class="ui gray tertiary form_seg segment">
+            <div class="info message"></div>
+            <form class="ui additem_form form">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="shop icon"></i>
+                        <input type="text" name="itemname" placeholder="Enter Name of the product">
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="dollar icon"></i>
+                        <input type="text" name="itemprice" placeholder="Enter Price for the product">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Product Description</label>
+                    <textarea class="itemDescription" rows="3" placeholder="Enter description for product"></textarea>
+                </div>
+                <div class="field">
+                    <select name="listingType" class="ui dropdown selectType">
+                              <option value="">Type of Listing</option>
+                              <option value="buy">Buy</option>
+                              <option value="sell">Sell</option>
+                            </select>
+                </div>
+                <!-- <div class="field">
+                        <label for="file" class="ui icon button">
+                            <i class="file icon"></i>
+                            Upload File</label>
+                        <input type="file" id="file" style="display:none">
+                    </div> -->
+                <div class="field">
+                    <div class="ui blue submit button">
+                        <i class="add square icon"></i>Add
+                    </div>
+                </div>
+                <div class="ui error message"></div>
+                <div class="result3"></div>
+            </form>
+        </div>
+    </div>
+    <!-- END ADD ITEM MODAL -->
 
     <!-- PRODUCTS LIST -->
     <div class="ui itemsList four cards">
@@ -390,23 +365,14 @@
     </div>
     <!-- END OF FOOTER -->
 
+    <!-- SCRIPTS -->
     <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
     <script src="semantic/dist/semantic.min.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="javascripts/app.js"></script>
+    <!-- END OF SCRIPTS -->
 </body>
 
 </html>
