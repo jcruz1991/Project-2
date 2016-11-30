@@ -197,6 +197,24 @@ var callShowAllListingsFunction = function() {
     }); //end ajax
 }; //end function
 
+var callGetInfoOfOneItemFunction = function(jsonStr) {
+    'use strict';
+    $.ajax({
+        type: 'POST',
+        data: jsonStr,
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/itemInfo',
+        success: function(data) {
+                console.log('success');
+                console.log(JSON.stringify(data));
+                console.log(data);
+                // addMovieToHtml(data);
+            } //end success
+    }); //end ajax
+};
+
+
 var main = function() {
 
     callShowAllListingsFunction();
@@ -205,6 +223,16 @@ var main = function() {
         // append to user list?
         // need to add user list
         console.log('user id received on clients:' + userData);
+    });
+
+    socket.on('updateAnItem', function(itemName) {
+        console.log('Update display for ' + itemName);
+        callGetInfoOfOneItemFunction({ 'itemName': itemName });
+    });
+
+    socket.on('updateListing', function() {
+        console.log('Update listing');
+        callShowAllListingsFunction();
     });
 
     $('.right_menu2').hide();
