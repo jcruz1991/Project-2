@@ -133,6 +133,9 @@ var callAddItemFunction = function() {
         contentType: 'application/json',
         url: 'http://localhost:3000/additems',
         success: function(data) {
+                // emit new item
+                socket.emit('newItemAdded', data.itemId );
+                console.log(data.itemId);
                 $('.result3').html(data);
                 $('.additem_form').trigger('reset');
                 $('.result3').html();
@@ -222,8 +225,14 @@ var main = function() {
     socket.on('newUser', function(userData) {
         // append to user list?
         // need to add user list
-        console.log('user id received on clients:' + userData);
+        console.log('user id received on clients: ' + userData);
     });
+
+    socket.on('newItem', function(item){
+      // NOTE //
+      //code to append to current item list goes here //
+    });
+
 
     socket.on('updateAnItem', function(itemName) {
         console.log('Update display for ' + itemName);
@@ -264,6 +273,7 @@ var main = function() {
     });
 
     $('.viewListing').click(function() {
+
         var userID = $('span.userId').text();
         var jsonStr = JSON.stringify({
             'userID': userID

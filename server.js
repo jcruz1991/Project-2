@@ -125,9 +125,10 @@ io.on('connection', function(socket) {
 
     });
 
-    // socket.on('newItem', function(itemData) {
-    // 	// tell everyone there's a new item from a logged in user
-    // });
+    socket.on('newItemAdded', function(itemId) {
+    	// tell everyone there's a new item from a logged in user
+    	io.emit('newItem', itemId);
+    });
 });
 
 // Route to remove an item of a user
@@ -171,6 +172,8 @@ app.post('/bidOnItem', function(req, res) {
 
                 //Let all online users know
                 onlineUsers.forEach(function(so) {
+                	// does this code ever execute?
+                	console.log('in online users.foreach');
                     so.emit('updateAnItem', itemName);
                 });
             }
@@ -181,7 +184,6 @@ app.post('/bidOnItem', function(req, res) {
 
 
 app.post('/itemInfo', function(req, res) {
-
     ItemDb.findOne({ itemName: req.body.itemName }, function(err, item) {
         if (item) {
             console.log('Found item' + req.body.itemName);
@@ -273,7 +275,8 @@ app.post('/additems', function(req, res) {
                     res.json('error while adding item to db');
                 } else {
                     console.log('listing added successfully');
-                    res.json('listing was added successfully to your List');
+                    console.log('listing was added successfully to your List');
+                    res.json({'itemId': i1._id});
                 }
             }); //end i1.save function
         } //end-if
@@ -281,7 +284,7 @@ app.post('/additems', function(req, res) {
             console.log(item.mUserId.length);
             for (var i = 0; i < item.mUserId.length; i++) {
                 if (item.mUserId[i] === req.body.userId) {
-                    // console.log('movie already exists in user's list');
+                    
                     console.log(item.mUserId[i]);
                     flagCounter++;
                 }
@@ -297,7 +300,8 @@ app.post('/additems', function(req, res) {
                         res.json('error while adding listing');
                     } else {
                         console.log('listing added to your list successfully');
-                        res.json('listing added to your list successfully');
+                        console.log('listing added to your list successfully');
+                        res.json({'itemId': item._id});
                     }
                 });
             } //end inner else
@@ -313,6 +317,9 @@ app.post('/additems', function(req, res) {
 app.post('/showListingsFor1User', function(req, res) {
     console.log('in get all listings for 1 user');
     UserDb.findOne({ _id: req.body.userID }).exec(function(err, user) {
+    	//     	console.log('user found is');
+    	// console.log(user);
+     //    ItemDb.find({ mUserId: {$elemMatch:{$eq: user._id }}}, { itemName: 1, itemPrice: 1, itemDescription: 1, itemType: 1, _id: 0 }, function(err, items) {
         ItemDb.find({ mUserId: user._id }, { itemName: 1, itemPrice: 1, itemDescription: 1, itemType: 1, _id: 0 }, function(err, items) {
             if (err) {
                 console.log('error while showing listings for 1 user');
