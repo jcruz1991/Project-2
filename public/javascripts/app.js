@@ -284,14 +284,22 @@ var main = function() {
 
     $('.login').on('click', function() {
         $('signup_modal').modal('hide');
-        $('item_modal').modal('hide');
         $('login_modal').modal('show');
     });
 
     $('.signup').on('click', function() {
         $('signup_modal').modal('show');
         $('login_modal').modal('hide');
-        $('item_modal').modal('hide');
+    });
+
+    // Item Modal
+    $('.product').on('click', function() {
+        $('.product_modal').modal('show');
+    });
+
+    // Bidding Modal
+    $('.bid').on('click', function() {
+        $('.bidding-modal').modal('show');
     });
 
     $('.login_form').form({
@@ -400,16 +408,6 @@ var main = function() {
 
             } //end onSuccess
     }); //end add item form validation
-
-    // Item Modal
-    $('.item').on('click', function() {
-        $('.item-modal').modal('show');
-    });
-
-    // Bidding Modal
-    $('.bid').on('click', function() {
-        $('.bidding-modal').modal('show');
-    });
 }; //end main
 
 
