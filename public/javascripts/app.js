@@ -195,21 +195,31 @@ var callShowAllListingsFunction = function() {
                 console.log('success');
                 console.log(JSON.stringify(data));
                 console.log(data);
-                for(var i=0;i<data.length;i++)
+                for(var i=0;i<data.itemList.length;i++)
                 {
                     $('.itemsList').append('<div class="ui product card">'+
                         '<a class="image" href="#">'+
                             '<img src="http://placehold.it/320x150" alt="">'+
                         '</a>'+
                         '<div class="content">'+
-                            '<a class="header" href="#">'+data[i].itemName+'</a>'+
+                            '<a class="header">'+data.itemList[i].itemName+'</a>'+
                             '<div class="meta">'+
-                                '<a><h3>'+data[i].itemPrice+'</h3></a>'+
-                                '<div class="description">'+
-                                    data[i].itemDescription+
+                                '<a><h3>Price : '+data.itemList[i].itemPrice+'</h3></a>'+
+                                '<div class="description">Description : '+
+                                    data.itemList[i].itemDescription+
                                 '</div>'+
+                                '<div class="postedBy">Posted By : '+data.itemList[i].mUserName+
                             '</div>'+
                         '</div>'+
+                        // '<div class="extra content">'+
+                        //   '<span class="right floated">'+
+                        //     'Posted By : '+data.itemList[i].mUserName+
+                        //   '</span>'+
+                        //   '<span>'+
+                        //     '<i class="user icon"></i>
+                        //     35 Friends
+                        //   </span>
+                        // </div>
                     '</div>');
                 }
                 // addMovieToHtml(data);
@@ -320,7 +330,8 @@ var main = function() {
     });
 
     // Item Modal
-    $('.product').on('click', function() {
+    $('.itemsList').on('click', '.product',function() {
+        console.log('in product click');
         $('.product_modal').modal('show');
     });
 
