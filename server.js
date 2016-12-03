@@ -34,7 +34,8 @@ var mongoose = require('mongoose');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = process.env.PORT || 3000;
+// var port = process.env.PORT || 3000;
+var port = 3000;
 // var request = require('request');
 
 mongoose.connect('mongodb://localhost/Project2');
@@ -325,7 +326,7 @@ app.post('/showListingsFor1User', function(req, res) {
                 console.log('error while showing listings for 1 user');
                 res.json('error while showing listings for 1 user');
             } else {
-                console.log(items);
+                // console.log(items);
                 res.json({ 'username': req.body.username1, 'userid': user._id, 'itemList': items });
             }
         }); //end find
@@ -343,9 +344,11 @@ app.get('/ShowAll', function(req, res) {
             console.log('error while getting listing');
             res.json('error while getting listing');
         } else {
-            console.log(items);
+        	console.log('in show all else');
+            //console.log(items);
+            console.log('hjsdkbcsj'+ items.itemName);
             // var movieIndex = movies[Math.floor(Math.random()*movies.length)]; //Function to get one random movie from the database at a time
-            res.json(items);
+            res.json({'itemList': items });
         }
     }); //end find
 }); //end get

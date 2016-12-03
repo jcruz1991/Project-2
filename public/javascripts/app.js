@@ -195,6 +195,23 @@ var callShowAllListingsFunction = function() {
                 console.log('success');
                 console.log(JSON.stringify(data));
                 console.log(data);
+                for(var i=0;i<data.length;i++)
+                {
+                    $('.itemsList').append('<div class="ui product card">'+
+                        '<a class="image" href="#">'+
+                            '<img src="http://placehold.it/320x150" alt="">'+
+                        '</a>'+
+                        '<div class="content">'+
+                            '<a class="header" href="#">'+data[i].itemName+'</a>'+
+                            '<div class="meta">'+
+                                '<a><h3>'+data[i].itemPrice+'</h3></a>'+
+                                '<div class="description">'+
+                                    data[i].itemDescription+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>');
+                }
                 // addMovieToHtml(data);
             } //end success
     }); //end ajax
