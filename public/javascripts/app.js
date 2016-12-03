@@ -312,6 +312,17 @@ var main = function() {
         $('.bidding-modal').modal('show');
     });
 
+    //Buying Item
+    $('.buyItem').on('click', function() {
+        alert("Congragulations you just bought an item");
+    });
+
+
+    // Users Listings Modal
+    $('.viewUsersListings').on('click', function() {
+        $('.usersListings-modal').modal('show');
+    });
+
     $('.login_form').form({
         fields: {
             ulname: {

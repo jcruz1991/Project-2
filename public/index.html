@@ -2,11 +2,6 @@
 
 <head>
     <title>CSUF Sell-It-Live</title>
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/homepage.css">
-
-
-
 </head>
 
 <body>
@@ -21,14 +16,14 @@
             <!-- <div class="ui left  icon input"> -->
             <i class="left floated add circle icon"></i>
             <div class="right floated content">
-                <div class="large header">Create a listing</div>
+                <div class="large header">Create a Listing</div>
             </div>
             <!-- </div> -->
         </a>
         <a class="viewListing item">
-            <i class="left floated list icon"></i>
+            <i class="viewUsersListings left floated list icon"></i>
             <div class="right floated content">
-                <div class="large header">View my listings</div>
+                <div class="viewUsersListings large header">View my Listings</div>
             </div>
         </a>
         <a class="logout item">
@@ -38,7 +33,6 @@
             </div>
         </a>
     </div>
-
 
     <!-- HEADER -->
     <div class="ui grid">
@@ -307,8 +301,8 @@
     <!-- ITEMS MODAL -->
     <div class="ui product_modal modal">
         <i class="close icon"></i>
-        <div class="header">
-            ITEM NAME
+        <div class="ui large center aligned header">
+            Item Name
         </div>
         <div class="image content">
             <div class="ui medium image">
@@ -323,7 +317,7 @@
             <div class="ui bid blue button">
                 Bid
             </div>
-            <div class="ui positive right labeled icon button">
+            <div class="ui buyItem positive right labeled icon button">
                 Buy
                 <i class="cart icon"></i>
             </div>
@@ -332,8 +326,11 @@
     <!-- END OF ITEMS MODAL-->
 
     <!-- BIDDING MODAL-->
-    <div class="ui bidding-modal modal">
-        <div class="ui list">
+    <div class="ui bidding-modal small modal">
+        <div class="ui relaxed divided list">
+            <div class="ui large center aligned header">
+                Item Name
+            </div>
             <div class="item">
                 <div class="content">
                     <a class="header">Rachel</a>
@@ -348,7 +345,7 @@
             </div>
         </div>
         <div class="ui left action input">
-            <input type="text" value="$52.03">
+            <input type="text" placeholder="$0.00">
             <button class="ui teal labeled icon button">
                   <i class="share icon"></i>
                   Submit Bid
@@ -356,6 +353,22 @@
         </div>
     </div>
     <!-- END OF BIDDING MODAL -->
+
+    <!-- Users Listings MODAL -->
+    <div class="ui usersListings-modal small modal">
+        <div class="ui relaxed divided list">
+            <div class="ui large center aligned header">
+                Your Items List
+            </div>
+            <div class="item">
+                Used Camera
+            </div>
+            <div class="item">
+                Brand new TV
+            </div>
+        </div>
+    </div>
+    <!-- End of Users Listings MODAL -->
 
     <!-- FOOTER -->
     <div class="ui vertical footer segment">
