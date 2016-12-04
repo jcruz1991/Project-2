@@ -154,7 +154,7 @@ var callAddItemFunction = function() {
     var itemDescription = $('.itemDescription').val();
     var itemType = $('.selectType option:selected').text();
     var userID = $('span.userId').text();
-    console.log(file);
+    console.log('file is :' + file);
     console.log(userID);
     console.log('type: ' + itemType);
     var formData = new FormData();
@@ -163,19 +163,24 @@ var callAddItemFunction = function() {
     formData.append('itemDescription', itemDescription);
     formData.append('itemType', itemType);
     formData.append('userId', userID);
-    formData.append('itemImage',file.name);
-    
-    var error = 0;
-    console.log(file.size);
-    if(!file.type.match('image.*')) {
-        console.log("<p> Images only. Select another file</p>");
-        error = 1;
-    }else if(file.size > 1048576){
-        console.log("<p> Too large Payload. Select another file</p>");
-        error = 1;
-    }else{
-            formData.append('image', file, file.name);
+
+    if(file != null) {
+       formData.append('itemImage',file.name);
+        var error = 0;
+        if(!file.type.match('image.*')) {
+            console.log("<p> Images only. Select another file</p>");
+            error = 1;
+        }else if(file.size > 1048576){
+            console.log("<p> Too large Payload. Select another file</p>");
+            error = 1;
+        }else{
+                formData.append('image', file, file.name);
+        }
+    } else {
+        formData.append('itemImage', "images.jpeg");
     }
+    
+
     //console.log(formData.getAll('image')+"rj");
 
     if(!error){
@@ -184,9 +189,10 @@ var callAddItemFunction = function() {
         xhr.send(formData);
         xhr.onload = function () {
             if (xhr.status === 200) {
+                console.log('in xhr itemadded success: ');
                 console.log(xhr.responseText);
-                socket.emit('newItemAdded', xhr.responseText.itemId );
-                console.log(xhr.responseText.itemId);
+                socket.emit('newItemAdded', xhr.responseText);
+               
                 $('.result3').html(xhr.responseText);
                 $('.additem_form').trigger('reset');
                 $('.result3').html();
@@ -278,6 +284,8 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
 };
 
 var updateItemView = function(itemList) {
+    console.log('itemlist inside update itemview is :');
+    console.log(itemList);
     for(var i=0;i<itemList.length;i++) {
         $('.itemsList').append('<div class="ui product card" id="'+ itemList[i]._id +'">'+
             '<a class="image" href="#">'+
@@ -339,6 +347,7 @@ var main = function() {
       // NOTE //
       //code to append to current item list goes here //
       var itemList = [item];
+      console.log('item in newitem is: ' + item);
       updateItemView(itemList);
     });
 
@@ -370,7 +379,7 @@ var main = function() {
     $('.ui.sidebar').sidebar('toggle');
 
     $('.logout').click(function() {
-
+        socket.emit('logout');
         $('.right_menu2').hide();
         $('.right_menu1').show();
         $('.ui.sidebar').sidebar('toggle');

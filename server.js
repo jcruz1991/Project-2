@@ -255,72 +255,70 @@ app.post('/login', function(req, res) {
  * 
  */
 app.post('/additems', function(req, res) {
-
     var form = new formidable.IncomingForm();
     var fields;
     form.parse(req, function(err, fields, files) {
-      //res.writeHead(200, {'content-type': 'text/plain'});
-      //('received upload:\n\n');
-    if(files!=null){
-        console.log(files.image.path);
-      
-        var temp_path = files.image.path;
-       // The file name of the uploaded file 
-        var file_name = files.image.name;
-        // Location where we want to copy the uploaded file 
-        var new_location = 'public/images/';
- 
-        fs.copy(temp_path, new_location + file_name, function(err) {  
-            if (err) {
-                console.error(err);
-            } else {
-                console.log("success!")
-            }
-        });
-    }
+      console.log('files is: ');
+      console.log(files);
+        if(files.length !== 0) {
+            console.log('in filelengthblock');
+            console.log(files.image.path);
 
-    req.body=fields;
-
-
-
-    var flagCounter = 0;
-    console.log('inside addmovies post method');
-    var itemName = req.body.itemName;
-    var itemPrice = req.body.itemPrice;
-    var itemDescription = req.body.itemName;
-    var itemType = req.body.itemName;
-    var uName;
-    UserDb.findOne({ _id: req.body.userId }).exec(function(err, user) {
-        if (!user) {
-            console.log('user does not exist' + err);
-            res.json({ 'error': 'user does not exist, please sign up first' });
-        } else {
-            uName = user.userName; 
-            var i1 = new ItemDb({
-                itemName: req.body.itemName,
-                itemPrice: req.body.itemPrice,
-                itemDescription: req.body.itemDescription,
-                itemType: req.body.itemType,
-                mUserName: uName,
-                itemCurrentBidPrice: 0,
-                itemImage:req.body.itemImage,
-                itemTotalBids: 0,
-                itemLastBidder: null
-            });
-            // i1.mUserId.push(uName);
-            i1.save(function(err, result) {
+            var temp_path = files.image.path;
+           // The file name of the uploaded file 
+            var file_name = files.image.name;
+            // Location where we want to copy the uploaded file 
+            var new_location = 'public/images/';
+     
+            fs.copy(temp_path, new_location + file_name, function(err) {  
                 if (err) {
-                    console.log('error while adding item To DB');
-                    res.json('error while adding item to db');
+                    console.error(err);
                 } else {
-                    console.log('listing added successfully');
-                    console.log('listing was added successfully to your List');
-                    res.json(result);
+                    console.log("success!")
+                    req.body=fields;
+
+                    var flagCounter = 0;
+                    var itemName = req.body.itemName;
+                    var itemPrice = req.body.itemPrice;
+                    var itemDescription = req.body.itemName;
+                    var itemType = req.body.itemName;
+                    var uName;
+                    UserDb.findOne({ _id: req.body.userId }).exec(function(err, user) {
+                        if (!user) {
+                            console.log('user does not exist' + err);
+                            res.json({ 'error': 'user does not exist, please sign up first' });
+                        } else {
+                            uName = user.userName; 
+                            var i1 = new ItemDb({
+                                itemName: req.body.itemName,
+                                itemPrice: req.body.itemPrice,
+                                itemDescription: req.body.itemDescription,
+                                itemType: req.body.itemType,
+                                mUserName: uName,
+                                itemCurrentBidPrice: 0,
+                                itemImage:req.body.itemImage,
+                                itemTotalBids: 0,
+                                itemLastBidder: null
+                            });
+                            // i1.mUserId.push(uName);
+                            i1.save(function(err, result) {
+                                if (err) {
+                                    console.log('error while adding item To DBBB');
+                                    res.json('error while adding item to db');
+                                } else {
+                                    console.log('item being added is: !!');
+                                    console.log(result);
+                                    console.log('listing added successfully');
+                                    console.log('listing was added successfully to your List');
+                                    res.json(result);
+                                }
+                            }); //end i1.save function
+                        }
+                    });
                 }
-            }); //end i1.save function
+            });
         }
     });
-});
 }); //end post
 
 /**
