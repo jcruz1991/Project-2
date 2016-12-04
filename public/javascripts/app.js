@@ -134,7 +134,9 @@ var callAddItemFunction = function() {
         url: 'http://localhost:3000/additems',
         success: function(data) {
                 // emit new item
-                socket.emit('newItemAdded', data.itemId );
+                console.log('item added: '+ data.itemName);
+
+                socket.emit('newItemAdded', data );
                 console.log(data.itemId);
                 $('.result3').html(data);
                 $('.additem_form').trigger('reset');
@@ -195,33 +197,8 @@ var callShowAllListingsFunction = function() {
                 console.log('success');
                 console.log(JSON.stringify(data));
                 console.log(data);
-                for(var i=0;i<data.itemList.length;i++)
-                {
-                    $('.itemsList').append('<div class="ui product card">'+
-                        '<a class="image" href="#">'+
-                            '<img src="http://placehold.it/320x150" alt="">'+
-                        '</a>'+
-                        '<div class="content">'+
-                            '<a class="header">'+data.itemList[i].itemName+'</a>'+
-                            '<div class="meta">'+
-                                '<a><h3>Price : '+data.itemList[i].itemPrice+'</h3></a>'+
-                                '<div class="description">Description : '+
-                                    data.itemList[i].itemDescription+
-                                '</div>'+
-                                '<div class="postedBy">Posted By : '+data.itemList[i].mUserName+
-                            '</div>'+
-                        '</div>'+
-                        // '<div class="extra content">'+
-                        //   '<span class="right floated">'+
-                        //     'Posted By : '+data.itemList[i].mUserName+
-                        //   '</span>'+
-                        //   '<span>'+
-                        //     '<i class="user icon"></i>
-                        //     35 Friends
-                        //   </span>
-                        // </div>
-                    '</div>');
-                }
+                updateItemView(data.itemList);
+
                 // addMovieToHtml(data);
             } //end success
     }); //end ajax
@@ -244,6 +221,35 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
     }); //end ajax
 };
 
+var updateItemView = function(itemList) {
+    for(var i=0;i<itemList.length;i++) {
+        $('.itemsList').append('<div class="ui product card">'+
+            '<a class="image" href="#">'+
+                '<img src="http://placehold.it/320x150" alt="">'+
+            '</a>'+
+            '<div class="content">'+
+                '<a class="header">'+itemList[i].itemName+'</a>'+
+                '<div class="meta">'+
+                    '<a><h3>Price : '+itemList[i].itemPrice+'</h3></a>'+
+                    '<div class="description">Description : '+
+                        itemList[i].itemDescription+
+                    '</div>'+
+                    '<div class="postedBy">Posted By : '+itemList[i].mUserName+
+                '</div>'+
+            '</div>'+
+            // '<div class="extra content">'+
+            //   '<span class="right floated">'+
+            //     'Posted By : '+data.itemList[i].mUserName+
+            //   '</span>'+
+            //   '<span>'+
+            //     '<i class="user icon"></i>
+            //     35 Friends
+            //   </span>
+            // </div>
+        '</div>');
+    }
+};
+
 
 var main = function() {
 
@@ -258,6 +264,8 @@ var main = function() {
     socket.on('newItem', function(item){
       // NOTE //
       //code to append to current item list goes here //
+      var itemList = [item];
+      updateItemView(itemList);
     });
 
 

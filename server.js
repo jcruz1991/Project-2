@@ -129,9 +129,9 @@ io.on('connection', function(socket) {
 
     });
 
-    socket.on('newItemAdded', function(itemId) {
+    socket.on('newItemAdded', function(itemData) {
     	// tell everyone there's a new item from a logged in user
-    	io.emit('newItem', itemId);
+    	io.emit('newItem', itemData);
     });
 });
 
@@ -284,7 +284,7 @@ app.post('/additems', function(req, res) {
                 } else {
                     console.log('listing added successfully');
                     console.log('listing was added successfully to your List');
-                    res.json({'itemId': i1._id});
+                    res.json(result);
                 }
             }); //end i1.save function
         }
