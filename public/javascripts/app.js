@@ -279,7 +279,7 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
 
 var updateItemView = function(itemList) {
     for(var i=0;i<itemList.length;i++) {
-        $('.itemsList').append('<div class="ui product card">'+
+        $('.itemsList').append('<div class="ui product card" id="'+ itemList[i]._id +'">'+
             '<a class="image" href="#">'+
                 '<img src="./images/'+itemList[i].itemImage+'" alt="" width="320px" height="150px">'+
             '</a>'+

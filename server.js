@@ -351,7 +351,7 @@ app.post('/showListingsFor1User', function(req, res) {
  */
 app.get('/ShowAll', function(req, res) {
     console.log('in get all listings');
-    ItemDb.find({}, { mUserName:1, itemName: 1, _id: 0, itemPrice: 1, itemDescription: 1,itemImage:1 }, function(err, items) {
+    ItemDb.find({}, { mUserName:1, itemName: 1, _id: 1, itemPrice: 1, itemDescription: 1,itemImage:1 }, function(err, items) {
         if (err) {
             console.log('error while getting listing');
             res.json('error while getting listing');
