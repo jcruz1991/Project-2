@@ -84,11 +84,11 @@ io.on('connection', function(socket) {
     console.log('Not signed up user connected');
 
     // user has logged on
-    socket.on('newUser', function(userId) {
+    socket.on('newUser', function(userName) {
         // write out on server side the user
-        console.log('Logged inuser ID received on server : ' + userId);
-        socket.userId = userId;
-        onlineUsers.push(socket);
+        console.log('Logged inuser ID received on server : ' + userName);
+        socket.userName = userName;
+        onlineUsers.push(userName);
 
         // emit new user to all clients
         //
@@ -97,24 +97,23 @@ io.on('connection', function(socket) {
         // items that this user has in their list in order to
         // display it to the other people wanting to buy something
         // from someone who is already logged in
-        io.emit('newUser', userId);
+        io.emit('newUser', userName);
     });
 
     socket.on('disconnect', function() {
-
         console.log('socket disconnected');
 
         //Check the socket
-        if (socket.userId != null) {
-
+        if (socket.userName != null) {
             //Remove the user from the online users list
-            console.log('user disconnect' + socket.userId);
-            onlineUsers.splice(onlineUsers.indexOf(socket), 1);
+            console.log('user disconnect' + socket.userName);
+            onlineUsers.splice(onlineUsers.indexOf(socket.userName), 1);
 
-            onlineUsers.forEach(function(so) {
-                so.emit('updateListing');
-            });
-
+            // onlineUsers.forEach(function(so) {
+            //     so.emit('updateListing');
+            // });
+            // emit user who left to clientside JS to remove
+            io.emit('userLeft', socket.userName);
         }
     });
 
@@ -365,4 +364,8 @@ app.get('/ShowAll', function(req, res) {
         }
     }); //end find
 }); //end get
+
+app.get('/users', function(req,res){
+    res.json(onlineUsers);
+});
 

@@ -78,7 +78,7 @@ var callLogInFunction = function() {
 
                     //emit new user logged in
                     console.log('in here bby');
-                    socket.emit('newUser', data.userid);
+                    socket.emit('newUser', data.username);
 
                     $('.result2').html(data);
                     $('.login_form').trigger('reset');
@@ -306,15 +306,33 @@ var updateItemView = function(itemList) {
     }
 };
 
+var getOnlineUsers = function() {
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/users',
+        success: function(users) {
+            console.log('getONline success: ');
+            for (var i = 0;i < users.length; i++) {
+                $('#onlineUsers').append($('<div class="small header">').text(users[i]));
+            }
+        } //end success
+    }); //end ajax
+}
+
 
 var main = function() {
-
+    // maybe change this to getlistings from online
     callShowAllListingsFunction();
+    // get users that are online
+    getOnlineUsers();
 
-    socket.on('newUser', function(userData) {
+    socket.on('newUser', function(userName) {
         // append to user list?
         // need to add user list
-        console.log('user id received on clients: ' + userData);
+        console.log('user id received on clients: ' + userName);
+         $('#onlineUsers').append($('<div class="small header">').text(userName));
     });
 
     socket.on('newItem', function(item){
@@ -322,6 +340,18 @@ var main = function() {
       //code to append to current item list goes here //
       var itemList = [item];
       updateItemView(itemList);
+    });
+
+    socket.on('userLeft', function(user) {
+        var userListElements = document.getElementById('onlineUsers'),
+            users = userListElements.getElementsByTagName('div');
+            // loop through userList, remove user who left if found
+            for(var i = 0; i < users.length; i++){
+                if(users[i].innerText === user){
+                    userListElements.removeChild(users[i]);
+                    return;
+                }
+            }
     });
 
 
