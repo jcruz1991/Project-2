@@ -20,9 +20,9 @@
 /*global require*/
 
 //server side javascript
-/*	CPSC 473 Project 1: Filmder (Should I watch this?)
-	Submitted by- Team- Oscillatory Memorization
-	Email- supra.chavan@gmail.com
+/*  CPSC 473 Project 1: Filmder (Should I watch this?)
+    Submitted by- Team- Oscillatory Memorization
+    Email- supra.chavan@gmail.com
  */
 
 //Modules required to run the application
@@ -32,6 +32,8 @@ var mongoose = require('mongoose');
 
 // variables for the app + socket.io
 var app = express();
+var formidable = require('formidable');
+var fs   = require('fs-extra');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 // var port = process.env.PORT || 3000;
@@ -58,7 +60,8 @@ var itemSchema = new mongoose.Schema({
     mInterestedUsers: [String],
     itemCurrentBidPrice: Number,
     itemTotalBids: Number,
-    itemLastBidder: String
+    itemLastBidder: String,
+    itemImage:String
 });
 
 
@@ -130,8 +133,8 @@ io.on('connection', function(socket) {
     });
 
     socket.on('newItemAdded', function(itemData) {
-    	// tell everyone there's a new item from a logged in user
-    	io.emit('newItem', itemData);
+        // tell everyone there's a new item from a logged in user
+        io.emit('newItem', itemData);
     });
 });
 
@@ -176,8 +179,8 @@ app.post('/bidOnItem', function(req, res) {
 
                 //Let all online users know
                 onlineUsers.forEach(function(so) {
-                	// does this code ever execute?
-                	console.log('in online users.foreach');
+                    // does this code ever execute?
+                    console.log('in online users.foreach');
                     so.emit('updateAnItem', itemName);
                 });
             }
@@ -253,6 +256,34 @@ app.post('/login', function(req, res) {
  * 
  */
 app.post('/additems', function(req, res) {
+
+    var form = new formidable.IncomingForm();
+    var fields;
+    form.parse(req, function(err, fields, files) {
+      //res.writeHead(200, {'content-type': 'text/plain'});
+      //('received upload:\n\n');
+    if(files!=null){
+        console.log(files.image.path);
+      
+        var temp_path = files.image.path;
+       // The file name of the uploaded file 
+        var file_name = files.image.name;
+        // Location where we want to copy the uploaded file 
+        var new_location = 'public/images/';
+ 
+        fs.copy(temp_path, new_location + file_name, function(err) {  
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("success!")
+            }
+        });
+    }
+
+    req.body=fields;
+
+
+
     var flagCounter = 0;
     console.log('inside addmovies post method');
     var itemName = req.body.itemName;
@@ -273,6 +304,7 @@ app.post('/additems', function(req, res) {
                 itemType: req.body.itemType,
                 mUserName: uName,
                 itemCurrentBidPrice: 0,
+                itemImage:req.body.itemImage,
                 itemTotalBids: 0,
                 itemLastBidder: null
             });
@@ -289,6 +321,7 @@ app.post('/additems', function(req, res) {
             }); //end i1.save function
         }
     });
+});
 }); //end post
 
 /**
@@ -298,8 +331,8 @@ app.post('/additems', function(req, res) {
 app.post('/showListingsFor1User', function(req, res) {
     console.log('in get all listings for 1 user');
     UserDb.findOne({ _id: req.body.userID }).exec(function(err, user) {
-    	//     	console.log('user found is');
-    	// console.log(user);
+        //      console.log('user found is');
+        // console.log(user);
      //    ItemDb.find({ mUserId: {$elemMatch:{$eq: user._id }}}, { itemName: 1, itemPrice: 1, itemDescription: 1, itemType: 1, _id: 0 }, function(err, items) {
         ItemDb.find({ mUserId: user._id }, { itemName: 1, itemPrice: 1, itemDescription: 1, itemType: 1, _id: 0 }, function(err, items) {
             if (err) {
@@ -319,7 +352,7 @@ app.post('/showListingsFor1User', function(req, res) {
  */
 app.get('/ShowAll', function(req, res) {
     console.log('in get all listings');
-    ItemDb.find({}, { mUserName:1, itemName: 1, _id: 0, itemPrice: 1, itemDescription: 1 }, function(err, items) {
+    ItemDb.find({}, { mUserName:1, itemName: 1, _id: 0, itemPrice: 1, itemDescription: 1,itemImage:1 }, function(err, items) {
         if (err) {
             console.log('error while getting listing');
             res.json('error while getting listing');

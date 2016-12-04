@@ -109,7 +109,7 @@ var callLogInFunction = function() {
  * Input- Moviename, user id
  * Output- on success, returns JSON message that movie is added successfully.
  */
-var callAddItemFunction = function() {
+var callAddItemFunctionOld = function() {
     'use strict';
 
     var itemName = document.getElementsByName('itemname')[0].value;
@@ -144,6 +144,62 @@ var callAddItemFunction = function() {
             } //end success
     }); //end ajax
 }; //end function
+
+var callAddItemFunction = function() {
+    'use strict';
+
+    var itemName = document.getElementsByName('itemname')[0].value;
+    var itemPrice = document.getElementsByName('itemprice')[0].value;
+    var file = $('#image').get(0).files[0];
+    var itemDescription = $('.itemDescription').val();
+    var itemType = $('.selectType option:selected').text();
+    var userID = $('span.userId').text();
+    console.log(file);
+    console.log(userID);
+    console.log('type: ' + itemType);
+    var formData = new FormData();
+    formData.append('itemName', itemName);
+    formData.append('itemPrice', itemPrice);
+    formData.append('itemDescription', itemDescription);
+    formData.append('itemType', itemType);
+    formData.append('userId', userID);
+    formData.append('itemImage',file.name);
+    
+    var error = 0;
+    console.log(file.size);
+    if(!file.type.match('image.*')) {
+        console.log("<p> Images only. Select another file</p>");
+        error = 1;
+    }else if(file.size > 1048576){
+        console.log("<p> Too large Payload. Select another file</p>");
+        error = 1;
+    }else{
+            formData.append('image', file, file.name);
+    }
+    //console.log(formData.getAll('image')+"rj");
+
+    if(!error){
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:3000/additems', true);
+        xhr.send(formData);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
+                socket.emit('newItemAdded', xhr.responseText.itemId );
+                console.log(xhr.responseText.itemId);
+                $('.result3').html(xhr.responseText);
+                $('.additem_form').trigger('reset');
+                $('.result3').html();
+            } else {
+                    console.log("<p> Error in upload, try again.</p>");
+            }
+        };
+    }
+};
+
+
+
+
 
 /**
  * Displays all movies in user's list, for logged in user
@@ -225,7 +281,7 @@ var updateItemView = function(itemList) {
     for(var i=0;i<itemList.length;i++) {
         $('.itemsList').append('<div class="ui product card">'+
             '<a class="image" href="#">'+
-                '<img src="http://placehold.it/320x150" alt="">'+
+                '<img src="./images/'+itemList[i].itemImage+'" alt="" width="320px" height="150px">'+
             '</a>'+
             '<div class="content">'+
                 '<a class="header">'+itemList[i].itemName+'</a>'+
