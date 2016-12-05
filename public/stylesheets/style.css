@@ -14,3 +14,8 @@ a {
 .usersItemsListing {
   padding: 10px;
 }
+
+.product{
+    max-width:300px;
+    min-height:200px;
+}

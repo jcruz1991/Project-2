@@ -261,7 +261,7 @@ app.post('/additems', function(req, res) {
     form.parse(req, function(err, fields, files) {
       console.log('files is: ');
       console.log(files);
-        if(files.length !== 0) {
+        if(Object.keys(files).length !== 0) {
             console.log('in filelengthblock');
             console.log(files.image.path);
 
@@ -317,6 +317,48 @@ app.post('/additems', function(req, res) {
                             }); //end i1.save function
                         }
                     });
+                }
+            });
+        } else {
+            console.log('no image file, use defailt');
+            req.body=fields;
+            
+            var itemName = req.body.itemName;
+            var itemPrice = req.body.itemPrice;
+            var itemDescription = req.body.itemName;
+            var itemType = req.body.itemName;
+            var uName;
+            UserDb.findOne({ _id: req.body.userId }).exec(function(err, user) {
+                if (!user) {
+                    console.log('user does not exist' + err);
+                    res.json({ 'error': 'user does not exist, please sign up first' });
+                } else {
+                    uName = user.userName;
+                    var i1 = new ItemDb({
+                        itemName: req.body.itemName,
+                        itemPrice: req.body.itemPrice,
+                        itemDescription: req.body.itemDescription,
+                        itemType: req.body.itemType,
+                        mUserName: uName,
+                        mUserId: req.body.userId,
+                        itemCurrentBidPrice: 0,
+                        itemImage:req.body.itemImage,
+                        itemTotalBids: 0,
+                        itemLastBidder: null
+                    });
+                    // i1.mUserId.push(uName);
+                    i1.save(function(err, result) {
+                        if (err) {
+                            console.log('error while adding item To DBBB');
+                            res.json('error while adding item to db');
+                        } else {
+                            console.log('item being added is: !!');
+                            console.log(result);
+                            console.log('listing added successfully');
+                            console.log('listing was added successfully to your List');
+                            res.json(result);
+                        }
+                    }); //end i1.save function
                 }
             });
         }

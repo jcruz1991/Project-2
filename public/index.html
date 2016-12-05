@@ -223,8 +223,10 @@
     <!-- PRODUCTS LIST -->
     <div class="ui itemsList four cards" data-bind='foreach: items'>
         <div class="ui item card" data-bind='id : itemID'>
-            <img class="image" href="#" data-bind='attr: {src : itemImage}'>
+        <a class="image">
+            <img href="#" data-bind='attr: {src : itemImage}'>
             </img>
+        </a>
             <div class="content">
                 <a class="header" href="#" data-bind='text: itemName'>PRODUCT 1</a>
                 <div class="meta">
