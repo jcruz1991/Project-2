@@ -15,6 +15,7 @@
 
 // this variable is required for socket.io
 var socket = io.connect('');
+var userG = "";
 var callSignUpFunction = function() {
     'use strict';
     var uname = document.getElementsByName('uname')[0].value;
@@ -75,7 +76,7 @@ var callLogInFunction = function() {
                     $('.result2').html(data.error);
                     $('.login_form').trigger('reset');
                 } else { //successful log in
-
+                    userG = data.username;
                     //emit new user logged in
                     console.log('in here bby');
                     socket.emit('newUser', data.username);
@@ -379,6 +380,7 @@ var main = function() {
     $('.ui.sidebar').sidebar('toggle');
 
     $('.logout').click(function() {
+        // socket.emit('logout', userG);
         socket.emit('logout');
         $('.right_menu2').hide();
         $('.right_menu1').show();

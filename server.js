@@ -123,11 +123,12 @@ io.on('connection', function(socket) {
 
         //Remove the user from the online users list
         console.log('user disconnect');
-        onlineUsers.splice(onlineUsers.indexOf(socket), 1);
 
-        onlineUsers.forEach(function(so) {
-            so.emit('updateListing');
-        });
+        socket.disconnect();
+
+        // onlineUsers.forEach(function(so) {
+        //     so.emit('updateListing');
+        // });
 
     });
 
@@ -295,6 +296,7 @@ app.post('/additems', function(req, res) {
                                 itemDescription: req.body.itemDescription,
                                 itemType: req.body.itemType,
                                 mUserName: uName,
+                                mUserId: req.body.userId,
                                 itemCurrentBidPrice: 0,
                                 itemImage:req.body.itemImage,
                                 itemTotalBids: 0,
