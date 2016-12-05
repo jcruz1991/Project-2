@@ -43,12 +43,11 @@ function BiddingViewModel() {
     };
 
     self.currentProduct = function(item) {
-        self.Name(item.itemName);
-        self.ID(item.itemID);
-        self.currentBidPrice(item.itemCurrentBidPrice);
-        self.lastBidder(item.itemLastBidder);
+        self.Name(item.itemName());
+        self.ID(item.itemID());
+        self.currentBidPrice(item.itemCurrentBidPrice());
+        self.lastBidder(item.itemLastBidder());
         self.newBidPrice(self.currentBidPrice() + 1);
-
     };
 
 };
@@ -63,24 +62,30 @@ function ItemViewModel() {
     self.mUserName = ko.observable("");
     self.itemCurrentBidPrice = ko.observable(0);
     self.itemTotalBids = ko.observable(0);
-    self.itemLastBidder = ko.observable('');
+    self.itemLastBidder = ko.observable("");
     self.biddingBtn = function() {
         biddingViewModel.currentProduct(self);
         $('.bidding-modal').modal('show');
     };
 
     self.newItem = function(item) {
-        self.itemName = item.itemName;
-        self.itemImage = './images/' + item.itemImage;
-        self.itemPrice = item.itemPrice;
-        self.itemDescription = item.itemDescription;
-        self.itemID = item._id;
-        self.mUserName = item.mUserName;
-        self.itemCurrentBidPrice = item.itemCurrentBidPrice;
-        self.itemTotalBids = item.itemTotalBids;
-        self.itemLastBidder = item.itemLastBidder;
-
+        self.itemName(item.itemName);
+        self.itemImage('./images/' + item.itemImage);
+        self.itemPrice(item.itemPrice);
+        self.itemDescription(item.itemDescription);
+        self.itemID(item._id);
+        self.mUserName(item.mUserName);
+        self.itemCurrentBidPrice(item.itemCurrentBidPrice);
+        self.itemTotalBids(item.itemTotalBids);
+        self.itemLastBidder(item.itemLastBidder);
     };
+
+    self.updateItem = function(item) {
+        self.itemCurrentBidPrice(item.itemCurrentBidPrice);
+        self.itemLastBidder(item.itemLastBidder);
+    };
+
+
 };
 
 function AppViewModel() {
@@ -92,6 +97,15 @@ function AppViewModel() {
         var item = new ItemViewModel();
         item.newItem(newItem);
         self.items.push(item);
+    };
+
+    self.updateAnItem = function(item) {
+        //search for the item using the item's id'
+        ko.utils.arrayForEach(self.items(), function(i) {
+            if (i.itemID() == item._id) {
+                i.updateItem(item);
+            }
+        });
     };
 };
 
@@ -114,9 +128,6 @@ var callSignUpFunction = function() {
         url: 'http://localhost:3000/signup',
         success: function(data) {
                 console.log('success');
-                // console.log(jsonStr);
-                // console.log(JSON.stringify(data));
-                // console.log(data);
                 $('.result').html(data);
                 $('.signup_form').trigger('reset');
                 $('login_modal').modal('destroy');
@@ -238,10 +249,13 @@ var callBidOnItem = function(item) {
         success: function(data) {
                 // emit item is bid
                 console.log(data.Result);
+                socket.emit('updateItem', item.ID());
             } //end success
     }); //end ajax
 
 };
+
+
 var callAddItemFunction = function() {
     'use strict';
 
@@ -374,7 +388,6 @@ var callShowAllListingsFunction = function() {
         success: function(data) {
                 console.log('success');
                 console.log(JSON.stringify(data));
-                console.log(data);
                 updateItemView(data.itemList);
 
                 // addMovieToHtml(data);
@@ -392,12 +405,11 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
         url: 'http://localhost:3000/itemInfo',
         success: function(data) {
                 console.log('success');
-                console.log(JSON.stringify(data));
-                console.log(data);
-                // addMovieToHtml(data);
+                myViewModel.updateAnItem(data);
             } //end success
     }); //end ajax
 };
+
 
 var updateItemView = function(itemList) {
     console.log('itemlist inside update itemview is :');
@@ -462,15 +474,14 @@ var main = function() {
         }
     });
 
-
-    socket.on('updateAnItem', function(itemName) {
-        console.log('Update display for ' + itemName);
-        callGetInfoOfOneItemFunction({ 'itemName': itemName });
-    });
-
     socket.on('updateListing', function() {
         console.log('Update listing');
         callShowAllListingsFunction();
+    });
+
+    socket.on('updateItem', function(itemID) {
+        console.log('updateItem' + itemID);
+        callGetInfoOfOneItemFunction(JSON.stringify({ 'itemID': itemID }));
     });
 
     $('.right_menu2').hide();
@@ -538,10 +549,6 @@ var main = function() {
         $('.product_modal').modal('show');
     });
 
-    // Bidding Modal
-    $('.bid').on('click', function() {
-        $('.bidding-modal').modal('show');
-    });
 
     //Buying Item
     $('.buyItem').on('click', function() {

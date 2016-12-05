@@ -136,6 +136,10 @@ io.on('connection', function(socket) {
         // tell everyone there's a new item from a logged in user
         io.emit('newItem', itemData);
     });
+
+    socket.on('updateItem', function(itemID) {
+        io.emit('updateItem', itemID);
+    });
 });
 
 // Route to remove an item of a user
@@ -176,13 +180,6 @@ app.post('/bidOnItem', function(req, res) {
             } else {
                 console.log('Successfully updated an item');
                 res.json({ 'Result': 'successful' });
-
-                //Let all online users know
-                // onlineUsers.forEach(function(so) {
-                //     // does this code ever execute?
-                //     console.log('in online users.foreach');
-                //     so.emit('updateAnItem', itemName);
-                // });
             }
         });
     });
@@ -191,7 +188,8 @@ app.post('/bidOnItem', function(req, res) {
 
 
 app.post('/itemInfo', function(req, res) {
-    ItemDb.findOne({ itemName: req.body.itemName }, function(err, item) {
+
+    ItemDb.findOne({ _id: req.body.itemID }, function(err, item) {
         if (item) {
             console.log('Found item' + req.body.itemName);
             res.json(item);
