@@ -135,9 +135,9 @@ var callAddItemFunctionOld = function() {
         url: 'http://localhost:3000/additems',
         success: function(data) {
                 // emit new item
-                console.log('item added: '+ data.itemName);
+                console.log('item added: ' + data.itemName);
 
-                socket.emit('newItemAdded', data );
+                socket.emit('newItemAdded', data);
                 console.log(data.itemId);
                 $('.result3').html(data);
                 $('.additem_form').trigger('reset');
@@ -165,17 +165,17 @@ var callAddItemFunction = function() {
     formData.append('itemType', itemType);
     formData.append('userId', userID);
 
-    if(file != null) {
-       formData.append('itemImage',file.name);
+    if (file != null) {
+        formData.append('itemImage', file.name);
         var error = 0;
-        if(!file.type.match('image.*')) {
+        if (!file.type.match('image.*')) {
             console.log("<p> Images only. Select another file</p>");
             error = 1;
-        }else if(file.size > 1048576){
+        } else if (file.size > 1048576) {
             console.log("<p> Too large Payload. Select another file</p>");
             error = 1;
-        }else{
-                formData.append('image', file, file.name);
+        } else {
+            formData.append('image', file, file.name);
         }
     } else {
         formData.append('itemImage', "images.jpeg");
@@ -184,21 +184,21 @@ var callAddItemFunction = function() {
 
     //console.log(formData.getAll('image')+"rj");
 
-    if(!error){
+    if (!error) {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'http://localhost:3000/additems', true);
         xhr.send(formData);
-        xhr.onload = function () {
+        xhr.onload = function() {
             if (xhr.status === 200) {
                 console.log('in xhr itemadded success: ');
-                console.log(xhr.responseText);
-                socket.emit('newItemAdded', xhr.responseText);
+                var response = JSON.parse(xhr.responseText);
+                socket.emit('newItemAdded', response);
 
                 $('.result3').html(xhr.responseText);
                 $('.additem_form').trigger('reset');
                 $('.result3').html();
             } else {
-                    console.log("<p> Error in upload, try again.</p>");
+                console.log("<p> Error in upload, try again.</p>");
             }
         };
     }
@@ -214,53 +214,53 @@ var callAddItemFunction = function() {
  * Output- on success, returns movie information as data
  * with upvotes and downvotes
  */
- var callShowListingsFor1User = function(jsonStr) {
-     'use strict';
-     // $('.movie_seg').empty();
-     $.ajax({
-         type: 'POST',
-         data: jsonStr,
-         dataType: 'json',
-         contentType: 'application/json',
-         url: 'http://localhost:3000/showListingsFor1User',
-         success: function(data) {
+var callShowListingsFor1User = function(jsonStr) {
+    'use strict';
+    // $('.movie_seg').empty();
+    $.ajax({
+        type: 'POST',
+        data: jsonStr,
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/showListingsFor1User',
+        success: function(data) {
 
-           console.log('success');
-           console.log(data.itemList);
+                console.log('success');
+                console.log(data.itemList);
 
-           for(var i = 0; i <data.itemList.length; i++) {
-             $('#userItemsListings').append(
-               '<div class="item">' +
-                 '<div class="usersItemsListing">' +
-                   data.itemList[i].itemName +
-                   '<div class="ui buttons">' +
-                     '<button class="ui blue button">Edit</button>' +
-                     '<button class="negative ui button">Delete</button>' +
-                   '</div>' +
-                 '</div>' +
-               '</div>'
-             );
-           }
-           /*
-                 console.log('success');
-                 console.log(jsonStr);
-                 console.log(JSON.stringify(data));
-                 console.log(data);
-                 if (data.error) {
-                     console.log('error');
-                 } else {
-                     console.log(data.itemList.length);
-                     if (true) {
-                         for (var i = 0; i < data.itemList.length; i++) {
-                             console.log(data.itemList[i]);
+                for (var i = 0; i < data.itemList.length; i++) {
+                    $('#userItemsListings').append(
+                        '<div class="item">' +
+                        '<div class="usersItemsListing">' +
+                        data.itemList[i].itemName +
+                        '<div class="ui buttons">' +
+                        '<button class="ui blue button">Edit</button>' +
+                        '<button class="negative ui button">Delete</button>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>'
+                    );
+                }
+                /*
+                      console.log('success');
+                      console.log(jsonStr);
+                      console.log(JSON.stringify(data));
+                      console.log(data);
+                      if (data.error) {
+                          console.log('error');
+                      } else {
+                          console.log(data.itemList.length);
+                          if (true) {
+                              for (var i = 0; i < data.itemList.length; i++) {
+                                  console.log(data.itemList[i]);
 
-                         } //end for
-                     } //end if
-                 } //end else
-                 */
-             } //end success
-     }); //end ajax
- }; //end function
+                              } //end for
+                          } //end if
+                      } //end else
+                      */
+            } //end success
+    }); //end ajax
+}; //end function
 
 /**
  * Displays all posted listings
@@ -306,21 +306,21 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
 var updateItemView = function(itemList) {
     console.log('itemlist inside update itemview is :');
     console.log(itemList);
-    for(var i=0;i<itemList.length;i++) {
-        $('.itemsList').append('<div class="ui product card" id="'+ itemList[i]._id +'">'+
-            '<a class="image" href="#">'+
-                '<img src="./images/'+itemList[i].itemImage+'" alt="" width="320px" height="150px">'+
-            '</a>'+
-            '<div class="content">'+
-                '<a class="header">'+itemList[i].itemName+'</a>'+
-                '<div class="meta">'+
-                    '<a><h3>Price : '+itemList[i].itemPrice+'</h3></a>'+
-                    '<div class="description">Description : '+
-                        itemList[i].itemDescription+
-                    '</div>'+
-                    '<div class="postedBy">Posted By : '+itemList[i].mUserName+
-                '</div>'+
-            '</div>'+
+    for (var i = 0; i < itemList.length; i++) {
+        $('.itemsList').append('<div class="ui product card" id="' + itemList[i]._id + '">' +
+            '<a class="image" href="#">' +
+            '<img src="./images/' + itemList[i].itemImage + '" alt="" width="320px" height="150px">' +
+            '</a>' +
+            '<div class="content">' +
+            '<a class="header">' + itemList[i].itemName + '</a>' +
+            '<div class="meta">' +
+            '<a><h3>Price : ' + itemList[i].itemPrice + '</h3></a>' +
+            '<div class="description">Description : ' +
+            itemList[i].itemDescription +
+            '</div>' +
+            '<div class="postedBy">Posted By : ' + itemList[i].mUserName +
+            '</div>' +
+            '</div>' +
             // '<div class="extra content">'+
             //   '<span class="right floated">'+
             //     'Posted By : '+data.itemList[i].mUserName+
@@ -330,7 +330,7 @@ var updateItemView = function(itemList) {
             //     35 Friends
             //   </span>
             // </div>
-        '</div>');
+            '</div>');
     }
 };
 
@@ -341,11 +341,11 @@ var getOnlineUsers = function() {
         contentType: 'application/json',
         url: 'http://localhost:3000/users',
         success: function(users) {
-            console.log('getONline success: ');
-            for (var i = 0;i < users.length; i++) {
-                $('#onlineUsers').append($('<div class="small header">').text(users[i]));
-            }
-        } //end success
+                console.log('getONline success: ');
+                for (var i = 0; i < users.length; i++) {
+                    $('#onlineUsers').append($('<div class="small header">').text(users[i]));
+                }
+            } //end success
     }); //end ajax
 }
 
@@ -360,27 +360,27 @@ var main = function() {
         // append to user list?
         // need to add user list
         console.log('user id received on clients: ' + userName);
-         $('#onlineUsers').append($('<div class="small header">').text(userName));
+        $('#onlineUsers').append($('<div class="small header">').text(userName));
     });
 
-    socket.on('newItem', function(item){
-      // NOTE //
-      //code to append to current item list goes here //
-      var itemList = [item];
-      console.log('item in newitem is: ' + item);
-      updateItemView(itemList);
+    socket.on('newItem', function(item) {
+        // NOTE //
+        //code to append to current item list goes here //
+        var itemList = [item];
+        console.log('item in newitem is: ' + item);
+        updateItemView(itemList);
     });
 
     socket.on('userLeft', function(user) {
         var userListElements = document.getElementById('onlineUsers'),
             users = userListElements.getElementsByTagName('div');
-            // loop through userList, remove user who left if found
-            for(var i = 0; i < users.length; i++){
-                if(users[i].innerText === user){
-                    userListElements.removeChild(users[i]);
-                    return;
-                }
+        // loop through userList, remove user who left if found
+        for (var i = 0; i < users.length; i++) {
+            if (users[i].innerText === user) {
+                userListElements.removeChild(users[i]);
+                return;
             }
+        }
     });
 
 
@@ -454,7 +454,7 @@ var main = function() {
     });
 
     // Item Modal
-    $('.itemsList').on('click', '.product',function() {
+    $('.itemsList').on('click', '.product', function() {
         console.log('in product click');
         $('.product_modal').modal('show');
     });
