@@ -349,51 +349,58 @@ var callShowListingsFor1User = function(jsonStr) {
     'use strict';
     // $('.movie_seg').empty();
     userListViewModel.userItemList([]);
-    $.ajax({
-        type: 'POST',
-        data: jsonStr,
-        dataType: 'json',
-        contentType: 'application/json',
-        url: 'http://localhost:3000/showListingsFor1User',
-        success: function(data) {
-                console.log('success showing listings for One user');
-                console.log(data.itemList);
-            for (var i = 0; i < data.itemList.length; i++) {
-                userListViewModel.addItemToUserList(data.itemList[i]);
-            }
+    ko.utils.arrayForEach(myViewModel.items(), function(i) {
+        console.log(i.mUserName());
+        if (i.mUserName() == userG) {
+            userListViewModel.userItemList.push(i);
+        }
+    });
 
-                // for (var i = 0; i < data.itemList.length; i++) {
-                // // knockout stuff here
-                //     $('#userItemsListings').append(
-                //         '<div class="item">' +
-                //         '<div class="usersItemsListing">' +
-                //         data.itemList[i].itemName +
-                //         '<div class="ui buttons">' +
-                //         '<button class="negative ui button">Delete</button>' +
-                //         '</div>' +
-                //         '</div>' +
-                //         '</div>'
-                //     );
-                // }
-                /*
-                      console.log('success');
-                      console.log(jsonStr);
-                      console.log(JSON.stringify(data));
-                      console.log(data);
-                      if (data.error) {
-                          console.log('error');
-                      } else {
-                          console.log(data.itemList.length);
-                          if (true) {
-                              for (var i = 0; i < data.itemList.length; i++) {
-                                  console.log(data.itemList[i]);
+    // $.ajax({
+    //     type: 'POST',
+    //     data: jsonStr,
+    //     dataType: 'json',
+    //     contentType: 'application/json',
+    //     url: 'http://localhost:3000/showListingsFor1User',
+    //     success: function(data) {
+    //             console.log('success showing listings for One user');
+    //             console.log(data.itemList);
+    //         for (var i = 0; i < data.itemList.length; i++) {
+    //             userListViewModel.addItemToUserList(data.itemList[i]);
+    //         }
 
-                              } //end for
-                          } //end if
-                      } //end else
-                      */
-            } //end success
-    }); //end ajax
+    //             // for (var i = 0; i < data.itemList.length; i++) {
+    //             // // knockout stuff here
+    //             //     $('#userItemsListings').append(
+    //             //         '<div class="item">' +
+    //             //         '<div class="usersItemsListing">' +
+    //             //         data.itemList[i].itemName +
+    //             //         '<div class="ui buttons">' +
+    //             //         '<button class="negative ui button">Delete</button>' +
+    //             //         '</div>' +
+    //             //         '</div>' +
+    //             //         '</div>'
+    //             //     );
+    //             // }
+    //             /*
+    //                   console.log('success');
+    //                   console.log(jsonStr);
+    //                   console.log(JSON.stringify(data));
+    //                   console.log(data);
+    //                   if (data.error) {
+    //                       console.log('error');
+    //                   } else {
+    //                       console.log(data.itemList.length);
+    //                       if (true) {
+    //                           for (var i = 0; i < data.itemList.length; i++) {
+    //                               console.log(data.itemList[i]);
+
+    //                           } //end for
+    //                       } //end if
+    //                   } //end else
+    //                   */
+    //         } //end success
+    // }); //end ajax
 }; //end function
 
 /**
