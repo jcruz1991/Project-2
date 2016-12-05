@@ -180,7 +180,7 @@ var callAddItemFunction = function() {
     } else {
         formData.append('itemImage', "images.jpeg");
     }
-    
+
 
     //console.log(formData.getAll('image')+"rj");
 
@@ -193,7 +193,7 @@ var callAddItemFunction = function() {
                 console.log('in xhr itemadded success: ');
                 console.log(xhr.responseText);
                 socket.emit('newItemAdded', xhr.responseText);
-               
+
                 $('.result3').html(xhr.responseText);
                 $('.additem_form').trigger('reset');
                 $('.result3').html();
@@ -214,34 +214,53 @@ var callAddItemFunction = function() {
  * Output- on success, returns movie information as data
  * with upvotes and downvotes
  */
-var callShowListingsFor1User = function(jsonStr) {
-    'use strict';
-    // $('.movie_seg').empty();
-    $.ajax({
-        type: 'POST',
-        data: jsonStr,
-        dataType: 'json',
-        contentType: 'application/json',
-        url: 'http://localhost:3000/showListingsFor1User',
-        success: function(data) {
-                console.log('success');
-                console.log(jsonStr);
-                console.log(JSON.stringify(data));
-                console.log(data);
-                if (data.error) {
-                    console.log('error');
-                } else {
-                    console.log(data.itemList.length);
-                    if (true) {
-                        for (var i = 0; i < data.itemList.length; i++) {
-                            console.log(data.itemList[i]);
+ var callShowListingsFor1User = function(jsonStr) {
+     'use strict';
+     // $('.movie_seg').empty();
+     $.ajax({
+         type: 'POST',
+         data: jsonStr,
+         dataType: 'json',
+         contentType: 'application/json',
+         url: 'http://localhost:3000/showListingsFor1User',
+         success: function(data) {
 
-                        } //end for
-                    } //end if
-                } //end else
-            } //end success
-    }); //end ajax
-}; //end function
+           console.log('success');
+           console.log(data.itemList);
+
+           for(var i = 0; i <data.itemList.length; i++) {
+             $('#userItemsListings').append(
+               '<div class="item">' +
+                 '<div class="usersItemsListing">' +
+                   data.itemList[i].itemName +
+                   '<div class="ui buttons">' +
+                     '<button class="ui blue button">Edit</button>' +
+                     '<button class="negative ui button">Delete</button>' +
+                   '</div>' +
+                 '</div>' +
+               '</div>'
+             );
+           }
+           /*
+                 console.log('success');
+                 console.log(jsonStr);
+                 console.log(JSON.stringify(data));
+                 console.log(data);
+                 if (data.error) {
+                     console.log('error');
+                 } else {
+                     console.log(data.itemList.length);
+                     if (true) {
+                         for (var i = 0; i < data.itemList.length; i++) {
+                             console.log(data.itemList[i]);
+
+                         } //end for
+                     } //end if
+                 } //end else
+                 */
+             } //end success
+     }); //end ajax
+ }; //end function
 
 /**
  * Displays all posted listings

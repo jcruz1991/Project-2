@@ -93,7 +93,7 @@ io.on('connection', function(socket) {
         // emit new user to all clients
         //
         // PLEASE NOTE:
-        // will probably have to change this to emit the list of 
+        // will probably have to change this to emit the list of
         // items that this user has in their list in order to
         // display it to the other people wanting to buy something
         // from someone who is already logged in
@@ -202,7 +202,7 @@ app.post('/itemInfo', function(req, res) {
 
 /**
  * Route for signup functionality for first-time user
- * 
+ *
  */
 app.post('/signup', function(req, res) {
     console.log('inside post method');
@@ -231,7 +231,7 @@ app.post('/signup', function(req, res) {
 
 /**
  * Route for login functionality for registered user
- * 
+ *
  */
 app.post('/login', function(req, res) {
     console.log('inside post-login method');
@@ -253,7 +253,7 @@ app.post('/login', function(req, res) {
 
 /**
  * Route for functionality to add movies for logged-in user
- * 
+ *
  */
 app.post('/additems', function(req, res) {
     var form = new formidable.IncomingForm();
@@ -266,12 +266,12 @@ app.post('/additems', function(req, res) {
             console.log(files.image.path);
 
             var temp_path = files.image.path;
-           // The file name of the uploaded file 
+           // The file name of the uploaded file
             var file_name = files.image.name;
-            // Location where we want to copy the uploaded file 
+            // Location where we want to copy the uploaded file
             var new_location = 'public/images/';
-     
-            fs.copy(temp_path, new_location + file_name, function(err) {  
+
+            fs.copy(temp_path, new_location + file_name, function(err) {
                 if (err) {
                     console.error(err);
                 } else {
@@ -289,7 +289,7 @@ app.post('/additems', function(req, res) {
                             console.log('user does not exist' + err);
                             res.json({ 'error': 'user does not exist, please sign up first' });
                         } else {
-                            uName = user.userName; 
+                            uName = user.userName;
                             var i1 = new ItemDb({
                                 itemName: req.body.itemName,
                                 itemPrice: req.body.itemPrice,
@@ -324,8 +324,8 @@ app.post('/additems', function(req, res) {
 }); //end post
 
 /**
- * Route for functionality to display all listings for 1 logged-in user 
- * 
+ * Route for functionality to display all listings for 1 logged-in user
+ *
  */
 app.post('/showListingsFor1User', function(req, res) {
     console.log('in get all listings for 1 user');
@@ -339,7 +339,8 @@ app.post('/showListingsFor1User', function(req, res) {
                 res.json('error while showing listings for 1 user');
             } else {
                 console.log(items);
-                res.json({ 'username': req.body.username1, 'userid': user._id, 'itemList': items });
+                //res.json({ 'username': req.body.username1, 'userid': user._id, 'itemList': items });
+                res.json({'itemList': items });
             }
         }); //end find
     }); //end findOne
@@ -347,7 +348,7 @@ app.post('/showListingsFor1User', function(req, res) {
 
 /**
  * Route for functionality to display all listings on home page
- * 
+ *
  */
 app.get('/ShowAll', function(req, res) {
     console.log('in get all listings');
@@ -368,4 +369,3 @@ app.get('/ShowAll', function(req, res) {
 app.get('/users', function(req,res){
     res.json(onlineUsers);
 });
-
