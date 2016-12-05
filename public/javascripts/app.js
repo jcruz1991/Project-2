@@ -17,6 +17,16 @@
 var socket = io.connect('');
 var myViewModel;
 
+function BiddingViewModel() {
+    var self = this;
+    self.biddingPrice = ko.observable();
+    self.itemName = ko.observable();
+
+    self.currentProduct = function(item) {
+        self.itemName = item.itemName;
+    };
+};
+
 function ItemViewModel() {
     var self = this;
     self.itemName = ko.observable("");
@@ -25,6 +35,10 @@ function ItemViewModel() {
     self.itemDescription = ko.observable("");
     self.itemID = ko.observable("");
     self.mUserName = ko.observable("");
+    self.biddingBtn = function() {
+        console.log(self.itemName + "got bid");
+        $('.bidding-modal').modal('show');
+    };
 
     self.newItem = function(item) {
         self.itemName = item.itemName;
@@ -33,6 +47,7 @@ function ItemViewModel() {
         self.itemDescription = item.itemDescription;
         self.itemID = item._id;
         self.mUserName = item.mUserName;
+
     };
 };
 
