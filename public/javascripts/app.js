@@ -30,6 +30,7 @@ function BiddingViewModel() {
     self.ID = ko.observable();
 
     self.submitBtn = function() {
+
         console.log("submit bidding" + self.newBidPrice());
         var newPrice = self.newBidPrice();
         if (newPrice > self.currentBidPrice()) {
@@ -40,6 +41,7 @@ function BiddingViewModel() {
         } else {
             self.message("Please enter a bigger price");
         }
+
     };
 
     self.currentProduct = function(item) {
@@ -65,8 +67,13 @@ function ItemViewModel() {
     self.itemLastBidder = ko.observable("");
     self.isSold = ko.observable(false);
     self.biddingBtn = function() {
-        biddingViewModel.currentProduct(self);
-        $('.bidding-modal').modal('show');
+        if (userG == "") {
+            alert("Please log in first before bidding");
+        } else {
+            biddingViewModel.currentProduct(self);
+            $('.bidding-modal').modal('show');
+        }
+
     };
 
     self.newItem = function(item) {
