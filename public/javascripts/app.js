@@ -117,6 +117,19 @@ function AppViewModel() {
     };
 };
 
+function userListViewModel() {
+    var self = this;
+    self.userItemList = ko.observableArray();
+
+    self.addItemToUserList = function(newItem) {
+        var item = new ItemViewModel();
+        item.newItem(newItem);
+        self.userItemList.push(item);
+    };
+
+    // add delete
+};
+
 
 var callSignUpFunction = function() {
     'use strict';
@@ -335,6 +348,7 @@ var callAddItemFunction = function() {
 var callShowListingsFor1User = function(jsonStr) {
     'use strict';
     // $('.movie_seg').empty();
+    userListViewModel.userItemList([]);
     $.ajax({
         type: 'POST',
         data: jsonStr,
@@ -342,23 +356,25 @@ var callShowListingsFor1User = function(jsonStr) {
         contentType: 'application/json',
         url: 'http://localhost:3000/showListingsFor1User',
         success: function(data) {
-
-                console.log('success');
+                console.log('success showing listings for One user');
                 console.log(data.itemList);
+            for (var i = 0; i < data.itemList.length; i++) {
+                userListViewModel.addItemToUserList(data.itemList[i]);
+            }
 
-                for (var i = 0; i < data.itemList.length; i++) {
-                    $('#userItemsListings').append(
-                        '<div class="item">' +
-                        '<div class="usersItemsListing">' +
-                        data.itemList[i].itemName +
-                        '<div class="ui buttons">' +
-                        '<button class="ui blue button">Edit</button>' +
-                        '<button class="negative ui button">Delete</button>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>'
-                    );
-                }
+                // for (var i = 0; i < data.itemList.length; i++) {
+                // // knockout stuff here
+                //     $('#userItemsListings').append(
+                //         '<div class="item">' +
+                //         '<div class="usersItemsListing">' +
+                //         data.itemList[i].itemName +
+                //         '<div class="ui buttons">' +
+                //         '<button class="negative ui button">Delete</button>' +
+                //         '</div>' +
+                //         '</div>' +
+                //         '</div>'
+                //     );
+                // }
                 /*
                       console.log('success');
                       console.log(jsonStr);
@@ -450,6 +466,11 @@ var main = function() {
 
     biddingViewModel = new BiddingViewModel();
     ko.applyBindings(biddingViewModel, document.getElementById('biddingModal'));
+
+    userListViewModel = new userListViewModel();
+    ko.applyBindings(userListViewModel, document.getElementById('listOfUsersItems'));
+
+
     // maybe change this to getlistings from online
     callShowAllListingsFunction();
     // get users that are online

@@ -310,21 +310,20 @@
     <!-- END OF BIDDING MODAL -->
 
     <!-- Users Listings MODAL -->
-    <div class="ui usersListings-modal small modal">
+    <div class="ui usersListings-modal small modal" >
         <div class="ui relaxed divided list" id="userItemsListings">
             <div class="ui large center aligned header">
                 Your Items List
             </div>
-            <!--
-            <div class="item">
-              <div class="usersItemsListing">
-                Used Camera
-                <div class="ui buttons">
-                  <button class="ui blue button">Edit</button>
-                  <button class="negative ui button">Delete</button>
+            <div id='listOfUsersItems' data-bind='foreach: userItemList'>           
+                <div class="item">
+                  <div class="usersItemsListing" data-bind='text: itemName'>
+                    <div class="ui buttons">
+                      <button class="negative ui button">Delete</button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div> -->
+            </div> 
         </div>
     </div>
     <!-- End of Users Listings MODAL -->
