@@ -214,7 +214,7 @@
     <!-- END ADD ITEM MODAL -->
 
     <!-- PRODUCTS LIST -->
-    <div class="ui itemsList four cards" data-bind='foreach: items'>
+    <div class="ui itemsList four cards" id='productList' data-bind='foreach: items'>
         <div class="ui item card" data-bind='id : itemID'>
             <a class="image">
                 <img href="#" data-bind='attr: {src : itemImage}'>
@@ -271,31 +271,30 @@
     <!-- END OF ITEMS MODAL-->
 
     <!-- BIDDING MODAL-->
-    <div class="ui bidding-modal small modal">
+    <div class="ui bidding-modal small modal" id='biddingModal'>
         <div class="ui relaxed divided list">
-            <div class="ui large center aligned header">
+            <div class="ui large center aligned header" data-bind='text: Name'>
                 Item Name
             </div>
+
             <div class="item">
                 <div class="content">
-                    <a class="header">Rachel</a>
-                    <div class="description">$21.00</div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="content">
-                    <a class="header">Veronika Ossi</a>
-                    <div class="description">$15.00</div>
+                    Last Bidder: <a class="header" data-bind='text: lastBidder'>Veronika Ossi</a>
+                    <div class="description">
+                        Current Bidding Price: $ <a data-bind='text: currentBidPrice'>$15.00</a>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="ui left action input">
-            <input type="text" placeholder="$0.00">
-            <button class="ui teal labeled icon button">
+            <input type="text" placeholder="$0.00" data-bind='value: newBidPrice'>
+            <button class="ui teal labeled icon button" data-bind='click: submitBtn'>
                   <i class="share icon"></i>
                   Submit Bid
                 </button>
         </div>
+        <a data-bind='text: message'>
+        </a>
     </div>
     <!-- END OF BIDDING MODAL -->
 

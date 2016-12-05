@@ -33,7 +33,7 @@ var mongoose = require('mongoose');
 // variables for the app + socket.io
 var app = express();
 var formidable = require('formidable');
-var fs   = require('fs-extra');
+var fs = require('fs-extra');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 // var port = process.env.PORT || 3000;
@@ -61,7 +61,7 @@ var itemSchema = new mongoose.Schema({
     itemCurrentBidPrice: Number,
     itemTotalBids: Number,
     itemLastBidder: String,
-    itemImage:String
+    itemImage: String
 });
 
 
@@ -159,16 +159,16 @@ app.post('/bidOnItem', function(req, res) {
     console.log('user bids on an item');
 
     //Find the item
-    ItemDb.findOne({ itemName: req.body.itemName }, function(err, item) {
-        var userId = req.body.userId;
+    ItemDb.findOne({ _id: req.body.itemID }, function(err, item) {
+        var userName = req.body.userName;
         var bidPrice = req.body.bidPrice;
         var newTotalBids = item.itemTotalBids + 1;
 
         //Update the item
-        ItemDb.update({ itemName: req.body.itemName }, {
+        ItemDb.update({ _id: req.body.itemID }, {
             itemCurrentBidPrice: bidPrice,
             itemTotalBids: newTotalBids,
-            itemLastBidder: userId
+            itemLastBidder: userName
         }, function(err, success) {
             if (err) {
                 console.log('Error when update item');
@@ -178,11 +178,11 @@ app.post('/bidOnItem', function(req, res) {
                 res.json({ 'Result': 'successful' });
 
                 //Let all online users know
-                onlineUsers.forEach(function(so) {
-                    // does this code ever execute?
-                    console.log('in online users.foreach');
-                    so.emit('updateAnItem', itemName);
-                });
+                // onlineUsers.forEach(function(so) {
+                //     // does this code ever execute?
+                //     console.log('in online users.foreach');
+                //     so.emit('updateAnItem', itemName);
+                // });
             }
         });
     });
@@ -259,14 +259,14 @@ app.post('/additems', function(req, res) {
     var form = new formidable.IncomingForm();
     var fields;
     form.parse(req, function(err, fields, files) {
-      console.log('files is: ');
-      console.log(files);
-        if(Object.keys(files).length !== 0) {
+        console.log('files is: ');
+        console.log(files);
+        if (Object.keys(files).length !== 0) {
             console.log('in filelengthblock');
             console.log(files.image.path);
 
             var temp_path = files.image.path;
-           // The file name of the uploaded file
+            // The file name of the uploaded file
             var file_name = files.image.name;
             // Location where we want to copy the uploaded file
             var new_location = 'public/images/';
@@ -276,7 +276,7 @@ app.post('/additems', function(req, res) {
                     console.error(err);
                 } else {
                     console.log("success!")
-                    req.body=fields;
+                    req.body = fields;
 
                     var flagCounter = 0;
                     var itemName = req.body.itemName;
@@ -298,7 +298,7 @@ app.post('/additems', function(req, res) {
                                 mUserName: uName,
                                 mUserId: req.body.userId,
                                 itemCurrentBidPrice: 0,
-                                itemImage:req.body.itemImage,
+                                itemImage: req.body.itemImage,
                                 itemTotalBids: 0,
                                 itemLastBidder: null
                             });
@@ -321,8 +321,8 @@ app.post('/additems', function(req, res) {
             });
         } else {
             console.log('no image file, use defailt');
-            req.body=fields;
-            
+            req.body = fields;
+
             var itemName = req.body.itemName;
             var itemPrice = req.body.itemPrice;
             var itemDescription = req.body.itemName;
@@ -342,7 +342,7 @@ app.post('/additems', function(req, res) {
                         mUserName: uName,
                         mUserId: req.body.userId,
                         itemCurrentBidPrice: 0,
-                        itemImage:req.body.itemImage,
+                        itemImage: req.body.itemImage,
                         itemTotalBids: 0,
                         itemLastBidder: null
                     });
@@ -374,7 +374,7 @@ app.post('/showListingsFor1User', function(req, res) {
     UserDb.findOne({ _id: req.body.userID }).exec(function(err, user) {
         //      console.log('user found is');
         // console.log(user);
-     //    ItemDb.find({ mUserId: {$elemMatch:{$eq: user._id }}}, { itemName: 1, itemPrice: 1, itemDescription: 1, itemType: 1, _id: 0 }, function(err, items) {
+        //    ItemDb.find({ mUserId: {$elemMatch:{$eq: user._id }}}, { itemName: 1, itemPrice: 1, itemDescription: 1, itemType: 1, _id: 0 }, function(err, items) {
         ItemDb.find({ mUserId: user._id }, { itemName: 1, itemPrice: 1, itemDescription: 1, itemType: 1, _id: 0 }, function(err, items) {
             if (err) {
                 console.log('error while showing listings for 1 user');
@@ -382,7 +382,7 @@ app.post('/showListingsFor1User', function(req, res) {
             } else {
                 console.log(items);
                 //res.json({ 'username': req.body.username1, 'userid': user._id, 'itemList': items });
-                res.json({'itemList': items });
+                res.json({ 'itemList': items });
             }
         }); //end find
     }); //end findOne
@@ -394,20 +394,18 @@ app.post('/showListingsFor1User', function(req, res) {
  */
 app.get('/ShowAll', function(req, res) {
     console.log('in get all listings');
-    ItemDb.find({}, { mUserName:1, itemName: 1, _id: 1, itemPrice: 1, itemDescription: 1,itemImage:1 }, function(err, items) {
+    ItemDb.find({}, function(err, items) {
         if (err) {
             console.log('error while getting listing');
             res.json('error while getting listing');
         } else {
             console.log('in show all else');
-            //console.log(items);
-            console.log('hjsdkbcsj'+ items.itemName);
             // var movieIndex = movies[Math.floor(Math.random()*movies.length)]; //Function to get one random movie from the database at a time
-            res.json({'itemList': items });
+            res.json({ 'itemList': items });
         }
     }); //end find
 }); //end get
 
-app.get('/users', function(req,res){
+app.get('/users', function(req, res) {
     res.json(onlineUsers);
 });

@@ -16,15 +16,41 @@
 // this variable is required for socket.io
 var socket = io.connect('');
 var myViewModel;
+var biddingViewModel;
+var userG = "";
 
 function BiddingViewModel() {
     var self = this;
     self.biddingPrice = ko.observable();
-    self.itemName = ko.observable();
+    self.Name = ko.observable();
+    self.currentBidPrice = ko.observable();
+    self.lastBidder = ko.observable();
+    self.newBidPrice = ko.observable();
+    self.message = ko.observable();
+    self.ID = ko.observable();
+
+    self.submitBtn = function() {
+        console.log("submit bidding" + self.newBidPrice());
+        var newPrice = self.newBidPrice();
+        if (newPrice > self.currentBidPrice()) {
+            self.currentBidPrice(self.newBidPrice());
+            self.lastBidder(userG);
+            self.message("Done!");
+            callBidOnItem(self);
+        } else {
+            self.message("Please enter a bigger price");
+        }
+    };
 
     self.currentProduct = function(item) {
-        self.itemName = item.itemName;
+        self.Name(item.itemName);
+        self.ID(item.itemID);
+        self.currentBidPrice(item.itemCurrentBidPrice);
+        self.lastBidder(item.itemLastBidder);
+        self.newBidPrice(self.currentBidPrice() + 1);
+
     };
+
 };
 
 function ItemViewModel() {
@@ -35,8 +61,11 @@ function ItemViewModel() {
     self.itemDescription = ko.observable("");
     self.itemID = ko.observable("");
     self.mUserName = ko.observable("");
+    self.itemCurrentBidPrice = ko.observable(0);
+    self.itemTotalBids = ko.observable(0);
+    self.itemLastBidder = ko.observable('');
     self.biddingBtn = function() {
-        console.log(self.itemName + "got bid");
+        biddingViewModel.currentProduct(self);
         $('.bidding-modal').modal('show');
     };
 
@@ -47,12 +76,14 @@ function ItemViewModel() {
         self.itemDescription = item.itemDescription;
         self.itemID = item._id;
         self.mUserName = item.mUserName;
+        self.itemCurrentBidPrice = item.itemCurrentBidPrice;
+        self.itemTotalBids = item.itemTotalBids;
+        self.itemLastBidder = item.itemLastBidder;
 
     };
 };
 
 function AppViewModel() {
-
     var self = this;
     //List of answers from all users
     self.items = ko.observableArray();
@@ -64,7 +95,7 @@ function AppViewModel() {
     };
 };
 
-var userG = "";
+
 var callSignUpFunction = function() {
     'use strict';
     var uname = document.getElementsByName('uname')[0].value;
@@ -83,9 +114,9 @@ var callSignUpFunction = function() {
         url: 'http://localhost:3000/signup',
         success: function(data) {
                 console.log('success');
-                console.log(jsonStr);
-                console.log(JSON.stringify(data));
-                console.log(data);
+                // console.log(jsonStr);
+                // console.log(JSON.stringify(data));
+                // console.log(data);
                 $('.result').html(data);
                 $('.signup_form').trigger('reset');
                 $('login_modal').modal('destroy');
@@ -117,10 +148,6 @@ var callLogInFunction = function() {
         url: 'http://localhost:3000/login',
         success: function(data) {
                 console.log('success');
-                console.log(jsonStr);
-                console.log(JSON.stringify(data));
-
-
                 if (data.error) {
                     $('.result2').html(data.error);
                     $('.login_form').trigger('reset');
@@ -195,6 +222,26 @@ var callAddItemFunctionOld = function() {
     }); //end ajax
 }; //end function
 
+var callBidOnItem = function(item) {
+
+    var jsonStr = JSON.stringify({
+        'itemID': item.ID(),
+        'bidPrice': item.currentBidPrice(),
+        'userName': item.lastBidder()
+    });
+    $.ajax({
+        type: 'POST',
+        data: jsonStr,
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/bidOnItem',
+        success: function(data) {
+                // emit item is bid
+                console.log(data.Result);
+            } //end success
+    }); //end ajax
+
+};
 var callAddItemFunction = function() {
     'use strict';
 
@@ -204,9 +251,9 @@ var callAddItemFunction = function() {
     var itemDescription = $('.itemDescription').val();
     var itemType = $('.selectType option:selected').text();
     var userID = $('span.userId').text();
-    console.log('file is :' + file);
-    console.log(userID);
-    console.log('type: ' + itemType);
+    // console.log('file is :' + file);
+    // console.log(userID);
+    // console.log('type: ' + itemType);
     var formData = new FormData();
     formData.append('itemName', itemName);
     formData.append('itemPrice', itemPrice);
@@ -379,7 +426,10 @@ var getOnlineUsers = function() {
 var main = function() {
 
     myViewModel = new AppViewModel();
-    ko.applyBindings(myViewModel);
+    ko.applyBindings(myViewModel, document.getElementById('productList'));
+
+    biddingViewModel = new BiddingViewModel();
+    ko.applyBindings(biddingViewModel, document.getElementById('biddingModal'));
     // maybe change this to getlistings from online
     callShowAllListingsFunction();
     // get users that are online
