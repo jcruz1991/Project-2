@@ -15,6 +15,40 @@
 
 // this variable is required for socket.io
 var socket = io.connect('');
+var myViewModel;
+
+function ItemViewModel() {
+    var self = this;
+    self.itemName = ko.observable("");
+    self.itemImage = ko.observable("");
+    self.itemPrice = ko.observable("");
+    self.itemDescription = ko.observable("");
+    self.itemID = ko.observable("");
+    self.mUserName = ko.observable("");
+
+    self.newItem = function(item) {
+        self.itemName = item.itemName;
+        self.itemImage = './images/' + item.itemImage;
+        self.itemPrice = item.itemPrice;
+        self.itemDescription = item.itemDescription;
+        self.itemID = item._id;
+        self.mUserName = item.mUserName;
+    };
+};
+
+function AppViewModel() {
+
+    var self = this;
+    //List of answers from all users
+    self.items = ko.observableArray();
+
+    self.addItem = function(newItem) {
+        var item = new ItemViewModel();
+        item.newItem(newItem);
+        self.items.push(item);
+    };
+};
+
 var userG = "";
 var callSignUpFunction = function() {
     'use strict';
@@ -307,30 +341,7 @@ var updateItemView = function(itemList) {
     console.log('itemlist inside update itemview is :');
     console.log(itemList);
     for (var i = 0; i < itemList.length; i++) {
-        $('.itemsList').append('<div class="ui product card" id="' + itemList[i]._id + '">' +
-            '<a class="image" href="#">' +
-            '<img src="./images/' + itemList[i].itemImage + '" alt="" width="320px" height="150px">' +
-            '</a>' +
-            '<div class="content">' +
-            '<a class="header">' + itemList[i].itemName + '</a>' +
-            '<div class="meta">' +
-            '<a><h3>Price : ' + itemList[i].itemPrice + '</h3></a>' +
-            '<div class="description">Description : ' +
-            itemList[i].itemDescription +
-            '</div>' +
-            '<div class="postedBy">Posted By : ' + itemList[i].mUserName +
-            '</div>' +
-            '</div>' +
-            // '<div class="extra content">'+
-            //   '<span class="right floated">'+
-            //     'Posted By : '+data.itemList[i].mUserName+
-            //   '</span>'+
-            //   '<span>'+
-            //     '<i class="user icon"></i>
-            //     35 Friends
-            //   </span>
-            // </div>
-            '</div>');
+        myViewModel.addItem(itemList[i]);
     }
 };
 
@@ -351,6 +362,9 @@ var getOnlineUsers = function() {
 
 
 var main = function() {
+
+    myViewModel = new AppViewModel();
+    ko.applyBindings(myViewModel);
     // maybe change this to getlistings from online
     callShowAllListingsFunction();
     // get users that are online

@@ -37,7 +37,7 @@
             <i class="user icon"></i>
             <div class="right floated content" id="onlineUsers">
                 <div class="large header">Users Online</div>
-                <div class ="ui middle aligned divided list"> </div>
+                <div class="ui middle aligned divided list"> </div>
             </div>
         </a>
     </div>
@@ -221,21 +221,27 @@
     <!-- END ADD ITEM MODAL -->
 
     <!-- PRODUCTS LIST -->
-    <div class="ui itemsList four cards">
-        <!-- <div class="ui product card">
-            <a class="image" href="#">
-                <img src="http://placehold.it/320x150" alt="">
-            </a>
+    <div class="ui itemsList four cards" data-bind='foreach: items'>
+        <div class="ui item card" data-bind='id : itemID'>
+            <img class="image" href="#" data-bind='attr: {src : itemImage}'>
+            </img>
             <div class="content">
-                <a class="header" href="#">PRODUCT 6</a>
+                <a class="header" href="#" data-bind='text: itemName'>PRODUCT 1</a>
                 <div class="meta">
-                    <a><h3>$9.99</h3></a>
+                    <a>
+                        <h3>
+                            $ <span data-bind='text: itemPrice'></span>
+                        </h3>
+                    </a>
                     <div class="description">
-                        Product Description goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Description: <span data-bind='text: itemDescription'></span>
                     </div>
+                    <div class="postedBy">Posted By : <span data-bind='text: mUserName'></span>
+                    </div>'
                 </div>
             </div>
-        </div> -->
+        </div>
+
     </div>
     <!-- END OF PRODUCTS LIST -->
 
@@ -328,6 +334,7 @@
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="semantic/dist/semantic.min.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js" type="text/javascript"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="javascripts/app.js"></script>
     <!-- END OF SCRIPTS -->
