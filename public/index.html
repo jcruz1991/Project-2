@@ -2,6 +2,8 @@
 
 <head>
     <title>CSUF Sell-It-Live</title>
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 </head>
 
 <body>
@@ -234,8 +236,17 @@
                     <div class="postedBy">Posted By : <span data-bind='text: mUserName'></span>
                     </div>
                 </div>
-                <div class="ui bid blue button" data-bind='click: biddingBtn'>
-                    Bid
+                <div class='biddingSection'>
+                    <div data-bind='ifnot: isSold'>
+                        <a class='totalBidders'>
+                            <span data-bind='text: itemTotalBids'></span> Bids
+                        </a>
+                        <div class="ui bid blue medium button" data-bind='click: biddingBtn'>
+                            Place Bid
+                        </div>
+                    </div>
+                    <a class='itemSold' data-bind='visible: isSold'> SOLD
+                    </a>
                 </div>
             </div>
         </div>
@@ -327,10 +338,9 @@
     <!-- END OF FOOTER -->
 
     <!-- SCRIPTS -->
-    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="semantic/dist/semantic.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
     <script src="https://ajax.aspnetcdn.com/ajax/knockout/knockout-3.1.0.js" type="text/javascript"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="javascripts/app.js"></script>

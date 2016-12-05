@@ -63,6 +63,7 @@ function ItemViewModel() {
     self.itemCurrentBidPrice = ko.observable(0);
     self.itemTotalBids = ko.observable(0);
     self.itemLastBidder = ko.observable("");
+    self.isSold = ko.observable(false);
     self.biddingBtn = function() {
         biddingViewModel.currentProduct(self);
         $('.bidding-modal').modal('show');
