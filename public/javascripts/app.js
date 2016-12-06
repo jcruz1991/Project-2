@@ -702,6 +702,19 @@ var main = function() {
                 rules: [{
                     type: 'empty',
                     prompt: 'This field cannot be empty'
+                }, {
+                type: 'number',
+                prompt: 'this field should be numeric value'
+                }]
+            },
+            itemBidPrice: {
+                identifier: 'itemBidPrice',
+                rules: [{
+                    type: 'empty',
+                    prompt: 'This field cannot be empty'
+                }, {
+                type: 'number',
+                prompt: 'this field should be numeric value'
                 }]
             }
         }, //end fields
