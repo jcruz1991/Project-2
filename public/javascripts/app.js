@@ -282,6 +282,7 @@ var callAddItemFunction = function() {
 
     var itemName = document.getElementsByName('itemname')[0].value;
     var itemPrice = document.getElementsByName('itemprice')[0].value;
+    var itemBidPrice = document.getElementsByName('itemBidPrice')[0].value;
     var file = $('#image').get(0).files[0];
     var itemDescription = $('.itemDescription').val();
     var itemType = $('.selectType option:selected').text();
@@ -292,9 +293,16 @@ var callAddItemFunction = function() {
     var formData = new FormData();
     formData.append('itemName', itemName);
     formData.append('itemPrice', itemPrice);
+
     formData.append('itemDescription', itemDescription);
     formData.append('itemType', itemType);
     formData.append('userId', userID);
+
+    if (itemBidPrice == null) {
+        itemBidPrice = 0;
+    }
+    formData.append('itemBidPrice', itemBidPrice);
+    console.log(itemBidPrice);
 
     if (file != null) {
         formData.append('itemImage', file.name);

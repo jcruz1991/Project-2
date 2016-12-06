@@ -295,7 +295,7 @@ app.post('/additems', function(req, res) {
                                 itemType: req.body.itemType,
                                 mUserName: uName,
                                 mUserId: req.body.userId,
-                                itemCurrentBidPrice: 0,
+                                itemCurrentBidPrice: req.body.itemBidPrice,
                                 itemImage: req.body.itemImage,
                                 itemTotalBids: 0,
                                 itemLastBidder: null
@@ -339,7 +339,7 @@ app.post('/additems', function(req, res) {
                         itemType: req.body.itemType,
                         mUserName: uName,
                         mUserId: req.body.userId,
-                        itemCurrentBidPrice: 0,
+                        itemCurrentBidPrice: req.body.itemBidPrice,
                         itemImage: req.body.itemImage,
                         itemTotalBids: 0,
                         itemLastBidder: null
