@@ -1,11 +1,5 @@
 /* jshint browser: true, jquery: true, camelcase: true, indent: 2, undef: true, quotmark: single, maxlen: 80, trailing: true, curly: true, eqeqeq: true, forin: true, immed: true, latedef: true, newcap: true, nonew: true, unused: true, strict: true */
 
-//client side javascript
-/* CPSC 473 Project 1: Filmder (Should I watch this?)
- Submitted by- Team- Oscillatory Memorization
- Email- supra.chavan@gmail.com
-*/
-
 /**
  * Sign up functionality for first time user
  * Submits sign up form data to server as JSON
@@ -214,10 +208,7 @@ var callLogInFunction = function() {
 }; //end function
 
 /**
- * Add movies functionality for logged in user
- * Submits  add movies form data to server as JSON
- * Input- Moviename, user id
- * Output- on success, returns JSON message that movie is added successfully.
+ * 
  */
 var callAddItemFunctionOld = function() {
     'use strict';
@@ -288,9 +279,7 @@ var callAddItemFunction = function() {
     var itemDescription = $('.itemDescription').val();
     var itemType = $('.selectType option:selected').text();
     var userID = $('span.userId').text();
-    // console.log('file is :' + file);
-    // console.log(userID);
-    // console.log('type: ' + itemType);
+
     var formData = new FormData();
     formData.append('itemName', itemName);
     formData.append('itemPrice', itemPrice);
@@ -322,7 +311,7 @@ var callAddItemFunction = function() {
     }
 
 
-    //console.log(formData.getAll('image')+"rj");
+
 
     if (!error) {
         var xhr = new XMLHttpRequest();
@@ -349,10 +338,8 @@ var callAddItemFunction = function() {
 
 
 /**
- * Displays all movies in user's list, for logged in user
+ * Displays all items in user's list, for logged in user
  * Input- user id in JSON format as argument jsonStr
- * Output- on success, returns movie information as data
- * with upvotes and downvotes
  */
 var callShowListingsFor1User = function(jsonStr) {
     'use strict';
@@ -365,51 +352,6 @@ var callShowListingsFor1User = function(jsonStr) {
         }
     });
 
-    // $.ajax({
-    //     type: 'POST',
-    //     data: jsonStr,
-    //     dataType: 'json',
-    //     contentType: 'application/json',
-    //     url: 'http://localhost:3000/showListingsFor1User',
-    //     success: function(data) {
-    //             console.log('success showing listings for One user');
-    //             console.log(data.itemList);
-    //         for (var i = 0; i < data.itemList.length; i++) {
-    //             userListViewModel.addItemToUserList(data.itemList[i]);
-    //         }
-
-    //             // for (var i = 0; i < data.itemList.length; i++) {
-    //             // // knockout stuff here
-    //             //     $('#userItemsListings').append(
-    //             //         '<div class="item">' +
-    //             //         '<div class="usersItemsListing">' +
-    //             //         data.itemList[i].itemName +
-    //             //         '<div class="ui buttons">' +
-    //             //         '<button class="negative ui button">Delete</button>' +
-    //             //         '</div>' +
-    //             //         '</div>' +
-    //             //         '</div>'
-    //             //     );
-    //             // }
-    //             /*
-    //                   console.log('success');
-    //                   console.log(jsonStr);
-    //                   console.log(JSON.stringify(data));
-    //                   console.log(data);
-    //                   if (data.error) {
-    //                       console.log('error');
-    //                   } else {
-    //                       console.log(data.itemList.length);
-    //                       if (true) {
-    //                           for (var i = 0; i < data.itemList.length; i++) {
-    //                               console.log(data.itemList[i]);
-
-    //                           } //end for
-    //                       } //end if
-    //                   } //end else
-    //                   */
-    //         } //end success
-    // }); //end ajax
 }; //end function
 
 /**
@@ -670,15 +612,6 @@ var main = function() {
                     prompt: 'Passwords do not match'
                 }]
             }
-            // chck: {
-            //   identifier : 'chck',
-            //   rules: [
-            //     {
-            //       type   : 'checked',
-            //       prompt : 'You must agree to the terms and conditions'
-            //     }
-            //   ]
-            // }
         }, //end fields
         onSuccess: function(event) {
                 callSignUpFunction();
