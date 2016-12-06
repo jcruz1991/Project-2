@@ -91,6 +91,7 @@ function ItemViewModel() {
     self.updateItem = function(item) {
         self.itemCurrentBidPrice(item.itemCurrentBidPrice);
         self.itemLastBidder(item.itemLastBidder);
+        self.itemTotalBids(item.itemTotalBids);
     };
 
 
