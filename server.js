@@ -20,9 +20,7 @@
 /*global require*/
 
 //server side javascript
-/*  CPSC 473 Project 1: Filmder (Should I watch this?)
-    Submitted by- Team- Oscillatory Memorization
-    Email- supra.chavan@gmail.com
+/*  CPSC 473 Project2 
  */
 
 //Modules required to run the application
@@ -38,7 +36,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 // var port = process.env.PORT || 3000;
 var port = 3000;
-// var request = require('request');
+
 
 mongoose.connect('mongodb://localhost/Project2');
 mongoose.set('debug', true);
@@ -91,12 +89,6 @@ io.on('connection', function(socket) {
         onlineUsers.push(userName);
 
         // emit new user to all clients
-        //
-        // PLEASE NOTE:
-        // will probably have to change this to emit the list of
-        // items that this user has in their list in order to
-        // display it to the other people wanting to buy something
-        // from someone who is already logged in
         io.emit('newUser', userName);
     });
 
@@ -109,10 +101,6 @@ io.on('connection', function(socket) {
             console.log('user disconnect' + socket.userName);
             onlineUsers.splice(onlineUsers.indexOf(socket.userName), 1);
 
-            // onlineUsers.forEach(function(so) {
-            //     so.emit('updateListing');
-            // });
-            // emit user who left to clientside JS to remove
             io.emit('userLeft', socket.userName);
         }
     });
@@ -125,10 +113,6 @@ io.on('connection', function(socket) {
         console.log('user disconnect');
 
         socket.disconnect();
-
-        // onlineUsers.forEach(function(so) {
-        //     so.emit('updateListing');
-        // });
 
     });
 
@@ -250,7 +234,7 @@ app.post('/login', function(req, res) {
 });
 
 /**
- * Route for functionality to add movies for logged-in user
+ * Route for functionality to add an Item for logged-in user
  *
  */
 app.post('/additems', function(req, res) {
@@ -370,9 +354,7 @@ app.post('/additems', function(req, res) {
 app.post('/showListingsFor1User', function(req, res) {
     console.log('in get all listings for 1 user');
     UserDb.findOne({ _id: req.body.userID }).exec(function(err, user) {
-        //      console.log('user found is');
-        // console.log(user);
-        //    ItemDb.find({ mUserId: {$elemMatch:{$eq: user._id }}}, { itemName: 1, itemPrice: 1, itemDescription: 1, itemType: 1, _id: 0 }, function(err, items) {
+        // user found, look for item
         ItemDb.find({ mUserId: user._id }, { itemName: 1, itemPrice: 1, itemDescription: 1, itemType: 1, _id: 0 }, function(err, items) {
             if (err) {
                 console.log('error while showing listings for 1 user');
@@ -398,12 +380,12 @@ app.get('/ShowAll', function(req, res) {
             res.json('error while getting listing');
         } else {
             console.log('in show all else');
-            // var movieIndex = movies[Math.floor(Math.random()*movies.length)]; //Function to get one random movie from the database at a time
             res.json({ 'itemList': items });
         }
     }); //end find
 }); //end get
 
+// get online Users list
 app.get('/users', function(req, res) {
     res.json(onlineUsers);
 });
