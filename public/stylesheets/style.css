@@ -9,6 +9,7 @@ a {
 
 .itemsList {
     padding: 100px;
+    background-color: gainsboro;
 }
 
 .usersItemsListing {
@@ -36,4 +37,20 @@ a {
 .itemSold {
     color: red;
     font-size: 2em;
+}
+
+.modal {
+    max-width:400px;
+}
+
+.viewAvatar{
+    max-height:40px;
+}
+
+.olUser{
+    padding:5px;
+}
+
+.usersListings-modal{
+    max-width: 800px;
 }

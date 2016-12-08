@@ -1,19 +1,28 @@
 /* jshint browser: true, jquery: true, camelcase: true, indent: 2, undef: true, quotmark: single, maxlen: 80, trailing: true, curly: true, eqeqeq: true, forin: true, immed: true, latedef: true, newcap: true, nonew: true, unused: true, strict: true */
 
-/**
- * Sign up functionality for first time user
- * Submits sign up form data to server as JSON
- * Input- Username, Email address, password
- * Output- on success, returns JSON message that user is added successfully.
- */
+/* global ko: true */
+/* global io: true */
+
+/*
+client side javascript
+CPSC 473 Project 2: Sell-it-live (Craigslist)
+Submitted by-
+    Julio Cruz
+    Edwin Diaz
+    Supra Chavan
+    Niket Kothari
+    Duy Do
+Email- supra.chavan@gmail.com
+*/
 
 // this variable is required for socket.io
 var socket = io.connect('');
 var myViewModel;
 var biddingViewModel;
-var userG = "";
+var userG = '';
 
 function BiddingViewModel() {
+    'use strict';
     var self = this;
     self.biddingPrice = ko.observable();
     self.Name = ko.observable();
@@ -25,15 +34,15 @@ function BiddingViewModel() {
 
     self.submitBtn = function() {
 
-        console.log("submit bidding" + self.newBidPrice());
+        console.log('submit bidding' + self.newBidPrice());
         var newPrice = self.newBidPrice();
         if (newPrice > self.currentBidPrice()) {
             self.currentBidPrice(self.newBidPrice());
             self.lastBidder(userG);
-            self.message("Done!");
+            self.message('Done!');
             callBidOnItem(self);
         } else {
-            self.message("Please enter a bigger price");
+            self.message('Please enter a bigger price');
         }
 
     };
@@ -46,23 +55,24 @@ function BiddingViewModel() {
         self.newBidPrice(self.currentBidPrice() + 1);
     };
 
-};
+}
 
 function ItemViewModel() {
+    'use strict';
     var self = this;
-    self.itemName = ko.observable("");
-    self.itemImage = ko.observable("");
-    self.itemPrice = ko.observable("");
-    self.itemDescription = ko.observable("");
-    self.itemID = ko.observable("");
-    self.mUserName = ko.observable("");
+    self.itemName = ko.observable('');
+    self.itemImage = ko.observable('');
+    self.itemPrice = ko.observable('');
+    self.itemDescription = ko.observable('');
+    self.itemID = ko.observable('');
+    self.mUserName = ko.observable('');
     self.itemCurrentBidPrice = ko.observable(0);
     self.itemTotalBids = ko.observable(0);
-    self.itemLastBidder = ko.observable("");
+    self.itemLastBidder = ko.observable('');
     self.isSold = ko.observable(false);
     self.biddingBtn = function() {
-        if (userG == "") {
-            alert("Please log in first before bidding");
+        if (userG === '') {
+            alert('Please log in first before bidding');
         } else {
             biddingViewModel.currentProduct(self);
             $('.bidding-modal').modal('show');
@@ -89,9 +99,10 @@ function ItemViewModel() {
     };
 
 
-};
+}
 
 function AppViewModel() {
+    'use strict';
     var self = this;
     //List of answers from all users
     self.items = ko.observableArray();
@@ -105,12 +116,12 @@ function AppViewModel() {
     self.updateAnItem = function(item) {
         //search for the item using the item's id'
         ko.utils.arrayForEach(self.items(), function(i) {
-            if (i.itemID() == item._id) {
+            if (i.itemID() === item._id) {
                 i.updateItem(item);
             }
         });
     };
-};
+}
 
 function userListViewModel() {
     var self = this;
@@ -123,9 +134,14 @@ function userListViewModel() {
     };
 
     // add delete
-};
+}
 
-
+/**
+ * Sign up functionality for first time user
+ * Submits sign up form data to server as JSON
+ * Input- Username, Email address, password
+ * Output- on success, returns JSON message that user is added successfully.
+ */
 var callSignUpFunction = function() {
     'use strict';
     var uname = document.getElementsByName('uname')[0].value;
@@ -198,9 +214,6 @@ var callLogInFunction = function() {
                     $('.userId').hide();
 
                     $('.right_menu2').show();
-                    // $('.login_seg').show();
-                    // $('.main_seg').hide();
-                    // $('.movie_seg').hide();
                     $('.ui.sidebar').sidebar('toggle');
                 } //end else
             } //end success
@@ -247,7 +260,7 @@ var callAddItemFunctionOld = function() {
 }; //end function
 
 var callBidOnItem = function(item) {
-
+        'use strict';
     var jsonStr = JSON.stringify({
         'itemID': item.ID(),
         'bidPrice': item.currentBidPrice(),
@@ -288,26 +301,26 @@ var callAddItemFunction = function() {
     formData.append('itemType', itemType);
     formData.append('userId', userID);
 
-    if (itemBidPrice == null) {
+    if (itemBidPrice === null) {
         itemBidPrice = 0;
     }
     formData.append('itemBidPrice', itemBidPrice);
     console.log(itemBidPrice);
 
-    if (file != null) {
+    if (file !== null) {
         formData.append('itemImage', file.name);
         var error = 0;
         if (!file.type.match('image.*')) {
-            console.log("<p> Images only. Select another file</p>");
+            console.log('<p> Images only. Select another file</p>');
             error = 1;
         } else if (file.size > 1048576) {
-            console.log("<p> Too large Payload. Select another file</p>");
+            console.log('<p> Too large Payload. Select another file</p>');
             error = 1;
         } else {
             formData.append('image', file, file.name);
         }
     } else {
-        formData.append('itemImage', "images.jpeg");
+        formData.append('itemImage', 'images.jpeg');
     }
 
 
@@ -327,7 +340,7 @@ var callAddItemFunction = function() {
                 $('.additem_form').trigger('reset');
                 $('.result3').html();
             } else {
-                console.log("<p> Error in upload, try again.</p>");
+                console.log('<p> Error in upload, try again.</p>');
             }
         };
     }
@@ -347,7 +360,7 @@ var callShowListingsFor1User = function(jsonStr) {
     userListViewModel.userItemList([]);
     ko.utils.arrayForEach(myViewModel.items(), function(i) {
         console.log(i.mUserName());
-        if (i.mUserName() == userG) {
+        if (i.mUserName() === userG) {
             userListViewModel.userItemList.push(i);
         }
     });
@@ -394,6 +407,7 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
 
 
 var updateItemView = function(itemList) {
+  'use strict';
     console.log('itemlist inside update itemview is :');
     console.log(itemList);
     for (var i = 0; i < itemList.length; i++) {
@@ -402,6 +416,7 @@ var updateItemView = function(itemList) {
 };
 
 var getOnlineUsers = function() {
+  'use strict';
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -410,14 +425,18 @@ var getOnlineUsers = function() {
         success: function(users) {
                 console.log('getONline success: ');
                 for (var i = 0; i < users.length; i++) {
-                    $('#onlineUsers').append($('<div class="small header">').text(users[i]));
+                    $('#onlineUsers').append(
+                      $('<div class="small olUser header">').text(users[i]));
                 }
             } //end success
     }); //end ajax
-}
+};
 
 
 var main = function() {
+  'use strict';
+
+
 
     myViewModel = new AppViewModel();
     ko.applyBindings(myViewModel, document.getElementById('productList'));
@@ -426,7 +445,8 @@ var main = function() {
     ko.applyBindings(biddingViewModel, document.getElementById('biddingModal'));
 
     userListViewModel = new userListViewModel();
-    ko.applyBindings(userListViewModel, document.getElementById('listOfUsersItems'));
+    ko.applyBindings(userListViewModel, 
+                     document.getElementById('listOfUsersItems'));
 
 
     // maybe change this to getlistings from online
@@ -438,7 +458,8 @@ var main = function() {
         // append to user list?
         // need to add user list
         console.log('user id received on clients: ' + userName);
-        $('#onlineUsers').append($('<div class="small header">').text(userName));
+        $('#onlineUsers').append(
+          $('<div class="small header">').text(userName));
     });
 
     socket.on('newItem', function(item) {
@@ -474,6 +495,14 @@ var main = function() {
     $('.right_menu2').hide();
     $('.right_menu1').show();
     $('.ui.sidebar').sidebar('toggle');
+
+    $('.about').click(function(){
+        $('.about_modal').modal('show');
+    });
+
+    $('.contact').click(function(){
+        $('.contact_modal').modal('show');
+    });
 
     $('.logout').click(function() {
         // socket.emit('logout', userG);
@@ -539,7 +568,7 @@ var main = function() {
 
     //Buying Item
     $('.buyItem').on('click', function() {
-        alert("Congragulations you just bought an item");
+        alert('Congragulations you just bought an item');
     });
 
 
@@ -611,7 +640,16 @@ var main = function() {
                     type: 'match[pwd1]',
                     prompt: 'Passwords do not match'
                 }]
-            }
+            },
+            terms: {
+            identifier : 'chck',
+            rules: [
+              {
+                type   : 'checked',
+                prompt : 'You must agree to the terms and conditions'
+              }
+            ]
+          }
         }, //end fields
         onSuccess: function(event) {
                 callSignUpFunction();

@@ -34,11 +34,13 @@ var formidable = require('formidable');
 var fs = require('fs-extra');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-// var port = process.env.PORT || 3000;
-var port = 3000;
+var port = process.env.PORT || 3000;
+//var port = 3000;
 
 
 mongoose.connect('mongodb://localhost/Project2');
+// mongoose.connect('mongodb://admin:admin@ds119738.mlab.com:19738/csufcraigslist');
+
 mongoose.set('debug', true);
 
 
