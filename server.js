@@ -139,19 +139,19 @@ io.on('connection', function(socket) {
 *
 */
 app.post('/removeItem', function(req, res) {
-    console.log('remove item');
+    console.log('remove item = ');
+    console.log(req.body._id);
     //Remove items of the users from the database
-    UserDb.findOne({ _id: req.body.userId }).exec(function(err, user) {
-        ItemDb.remove({ mUserId: user._id, itemName: req.body.itemName }, function(err, items) {
+        ItemDb.remove({ _id: req.body._id}, function(err, item) {
             if (err) {
                 console.log('error while delete an item');
                 res.json({ 'Result': 'Failed' });
             } else {
-                console.log(items);
+                
                 res.json({ 'Result': 'successful' });
             }
         });
-    });
+
 });
 
 /**

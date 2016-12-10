@@ -96,6 +96,10 @@ function ItemViewModel() {
         self.itemLastBidder(item.itemLastBidder);
         self.itemTotalBids(item.itemTotalBids);
     }; //end function updateItem()
+    self.deleteItem = function() {
+        console.log('delete item clicked');
+        removeItem(self);
+    }
 } //end ItemViewModel
 
 function AppViewModel() {
@@ -122,14 +126,6 @@ function AppViewModel() {
 function userListViewModel() {
     var self = this;
     self.userItemList = ko.observableArray();
-
-    self.addItemToUserList = function(newItem) {
-        var item = new ItemViewModel();
-        item.newItem(newItem);
-        self.userItemList.push(item);
-    };
-
-    // add delete
 } //end userListViewModel()
 
 /**
@@ -138,6 +134,29 @@ function userListViewModel() {
  * Input- Username, Email address, password
  * Output- on success, returns JSON message that user is added successfully.
  */
+
+var removeItem = function(itemToRemove) {
+    var itemToDelete = JSON.stringify({'_id': itemToRemove.itemID()});
+    console.log('inside removeItem');
+    $.ajax({
+        type: 'POST',
+        data: itemToDelete,
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/removeItem',
+        success: function(deletedItem) {
+                console.log('successfully deleted item' + deletedItem);
+                //myViewModel.deleteUsersItem(deletedItem);
+        }
+    });
+    ko.utils.arrayForEach(myViewModel.items(), function(i) {
+//         console.log(i.mUserName());
+        if (i.itemID() == itemToRemove.itemID()) {
+            console.log('match found kekd');
+            userListViewModel.userItemList.remove(i);
+       }
+    });
+};
 var callSignUpFunction = function() {
     'use strict';
     var uname = document.getElementsByName('uname')[0].value;
