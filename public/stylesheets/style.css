@@ -44,7 +44,7 @@ a {
 }
 
 .viewAvatar{
-    max-height:40px;
+    min-height:50px;
 }
 
 .olUser{

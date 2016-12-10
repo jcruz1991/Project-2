@@ -19,30 +19,37 @@
 
 /*global require*/
 
-//server side javascript
-/*  CPSC 473 Project2 
- */
+/*
+File- server side javascript
+CPSC 473 Project 2: Sell-it-live (Craigslist)
+Submitted by-
+    Julio Cruz
+    Edwin Diaz
+    Supra Chavan
+    Niket Kothari
+    Duy Do
+Email- supra.chavan@gmail.com
+*/
 
 //Modules required to run the application
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var formidable = require('formidable');
+var fs = require('fs-extra');
 
 // variables for the app + socket.io
 var app = express();
-var formidable = require('formidable');
-var fs = require('fs-extra');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = process.env.PORT || 3000;
-//var port = 3000;
+// var port = process.env.PORT || 3000;
+var port = 3000;
 
 
 mongoose.connect('mongodb://localhost/Project2');
 // mongoose.connect('mongodb://admin:admin@ds119738.mlab.com:19738/csufcraigslist');
 
 mongoose.set('debug', true);
-
 
 var userSchema = new mongoose.Schema({
     userName: String,
@@ -64,7 +71,6 @@ var itemSchema = new mongoose.Schema({
     itemImage: String
 });
 
-
 var UserDb = mongoose.model('user', userSchema);
 var ItemDb = mongoose.model('item', itemSchema);
 
@@ -80,6 +86,10 @@ server.listen(port, function() {
     console.log('Server listening on port 3000.');
 });
 
+/**
+*Functions that will be called as part of socket
+*for real time updates
+*/
 io.on('connection', function(socket) {
     console.log('Not signed up user connected');
 
@@ -98,24 +108,20 @@ io.on('connection', function(socket) {
         console.log('socket disconnected');
 
         //Check the socket
-        if (socket.userName != null) {
+        if (socket.userName !== null) {
             //Remove the user from the online users list
             console.log('user disconnect' + socket.userName);
             onlineUsers.splice(onlineUsers.indexOf(socket.userName), 1);
-
             io.emit('userLeft', socket.userName);
         }
     });
 
+    //user has logged out
     socket.on('logout', function() {
-
         socket.userId = null;
-
         //Remove the user from the online users list
         console.log('user disconnect');
-
         socket.disconnect();
-
     });
 
     socket.on('newItemAdded', function(itemData) {
@@ -126,9 +132,12 @@ io.on('connection', function(socket) {
     socket.on('updateItem', function(itemID) {
         io.emit('updateItem', itemID);
     });
-});
+}); //end io.on
 
-// Route to remove an item of a user
+/**
+*Route for remove item from user's account
+*
+*/
 app.post('/removeItem', function(req, res) {
     console.log('remove item');
     //Remove items of the users from the database
@@ -145,6 +154,10 @@ app.post('/removeItem', function(req, res) {
     });
 });
 
+/**
+*Route for bidding on a posted item
+*
+*/
 app.post('/bidOnItem', function(req, res) {
     console.log('user bids on an item');
 
@@ -167,21 +180,23 @@ app.post('/bidOnItem', function(req, res) {
                 console.log('Successfully updated an item');
                 res.json({ 'Result': 'successful' });
             }
-        });
-    });
+        }); //end function
+    }); //end findOne
+}); //end post
 
-});
 
-
+/*
+*Rote to retrieve information for specific item
+*
+*/
 app.post('/itemInfo', function(req, res) {
-
     ItemDb.findOne({ _id: req.body.itemID }, function(err, item) {
         if (item) {
             console.log('Found item' + req.body.itemName);
             res.json(item);
         }
-    });
-});
+    }); //end findOne
+}); //end post
 
 
 /**
@@ -210,8 +225,8 @@ app.post('/signup', function(req, res) {
             console.log('user already exists');
             res.json('user already exists, please try again with diffrent user name');
         }
-    });
-});
+    }); //end findOne
+});//end post
 
 /**
  * Route for login functionality for registered user
@@ -232,8 +247,8 @@ app.post('/login', function(req, res) {
                 res.json({ 'username': req.body.username1, 'userid': user._id });
             }
         }
-    });
-});
+    });//end findOne
+}); //end post
 
 /**
  * Route for functionality to add an Item for logged-in user
@@ -241,10 +256,11 @@ app.post('/login', function(req, res) {
  */
 app.post('/additems', function(req, res) {
     var form = new formidable.IncomingForm();
-    var fields;
+    //var fields;
     form.parse(req, function(err, fields, files) {
         console.log('files is: ');
         console.log(files);
+
         if (Object.keys(files).length !== 0) {
             console.log('in filelengthblock');
             console.log(files.image.path);
@@ -255,18 +271,19 @@ app.post('/additems', function(req, res) {
             // Location where we want to copy the uploaded file
             var new_location = 'public/images/';
 
-            fs.copy(temp_path, new_location + file_name, function(err) {
+            fs.copy(temp_path, new_location + file_name, function(err) 
+            {
                 if (err) {
                     console.error(err);
                 } else {
-                    console.log("success!")
+                    console.log("success!");
                     req.body = fields;
 
-                    var flagCounter = 0;
-                    var itemName = req.body.itemName;
-                    var itemPrice = req.body.itemPrice;
-                    var itemDescription = req.body.itemName;
-                    var itemType = req.body.itemName;
+                    //var flagCounter = 0;
+                    //var itemName = req.body.itemName;
+                    //var itemPrice = req.body.itemPrice;
+                    //var itemDescription = req.body.itemName;
+                    //var itemType = req.body.itemName;
                     var uName;
                     UserDb.findOne({ _id: req.body.userId }).exec(function(err, user) {
                         if (!user) {
@@ -300,17 +317,17 @@ app.post('/additems', function(req, res) {
                                 }
                             }); //end i1.save function
                         }
-                    });
-                }
-            });
+                    }); //end findOne
+                } //end else
+            }); //end fs.copy
         } else {
             console.log('no image file, use defailt');
             req.body = fields;
 
-            var itemName = req.body.itemName;
-            var itemPrice = req.body.itemPrice;
-            var itemDescription = req.body.itemName;
-            var itemType = req.body.itemName;
+            //var itemName = req.body.itemName;
+            //var itemPrice = req.body.itemPrice;
+            //var itemDescription = req.body.itemName;
+            //var itemType = req.body.itemName;
             var uName;
             UserDb.findOne({ _id: req.body.userId }).exec(function(err, user) {
                 if (!user) {
@@ -344,8 +361,8 @@ app.post('/additems', function(req, res) {
                         }
                     }); //end i1.save function
                 }
-            });
-        }
+            }); //end findOne
+        } //end else
     });
 }); //end post
 
@@ -387,7 +404,9 @@ app.get('/ShowAll', function(req, res) {
     }); //end find
 }); //end get
 
-// get online Users list
+/**
+ * Route for functionality to retrieve online users' list
+ */
 app.get('/users', function(req, res) {
     res.json(onlineUsers);
-});
+});//end get

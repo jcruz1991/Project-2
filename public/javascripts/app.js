@@ -4,7 +4,7 @@
 /* global io: true */
 
 /*
-client side javascript
+File- client side javascript
 CPSC 473 Project 2: Sell-it-live (Craigslist)
 Submitted by-
     Julio Cruz
@@ -45,7 +45,7 @@ function BiddingViewModel() {
             self.message('Please enter a bigger price');
         }
 
-    };
+    }; //end function submitBtn() 
 
     self.currentProduct = function(item) {
         self.Name(item.itemName());
@@ -53,9 +53,9 @@ function BiddingViewModel() {
         self.currentBidPrice(item.itemCurrentBidPrice());
         self.lastBidder(item.itemLastBidder());
         self.newBidPrice(self.currentBidPrice() + 1);
-    };
+    }; //end function currentProduct()
 
-}
+}//end function BiddingViewModel() 
 
 function ItemViewModel() {
     'use strict';
@@ -77,8 +77,7 @@ function ItemViewModel() {
             biddingViewModel.currentProduct(self);
             $('.bidding-modal').modal('show');
         }
-
-    };
+    }; //end function biddingBtn()
 
     self.newItem = function(item) {
         self.itemName(item.itemName);
@@ -90,23 +89,20 @@ function ItemViewModel() {
         self.itemCurrentBidPrice(item.itemCurrentBidPrice);
         self.itemTotalBids(item.itemTotalBids);
         self.itemLastBidder(item.itemLastBidder);
-    };
+    }; //end function newItem()
 
     self.updateItem = function(item) {
         self.itemCurrentBidPrice(item.itemCurrentBidPrice);
         self.itemLastBidder(item.itemLastBidder);
         self.itemTotalBids(item.itemTotalBids);
-    };
-
-
-}
+    }; //end function updateItem()
+} //end ItemViewModel
 
 function AppViewModel() {
     'use strict';
     var self = this;
     //List of answers from all users
     self.items = ko.observableArray();
-
     self.addItem = function(newItem) {
         var item = new ItemViewModel();
         item.newItem(newItem);
@@ -121,7 +117,7 @@ function AppViewModel() {
             }
         });
     };
-}
+} //end AppViewModel
 
 function userListViewModel() {
     var self = this;
@@ -134,7 +130,7 @@ function userListViewModel() {
     };
 
     // add delete
-}
+} //end userListViewModel()
 
 /**
  * Sign up functionality for first time user
@@ -165,7 +161,7 @@ var callSignUpFunction = function() {
                 $('login_modal').modal('destroy');
             } //end success
     }); //end ajax
-}; //end function
+}; //end callSignUpFunction()
 
 /**
  * Log in functionality for registered user
@@ -218,7 +214,7 @@ var callLogInFunction = function() {
                 } //end else
             } //end success
     }); //end ajax
-}; //end function
+}; //end callLogInFunction
 
 /**
  * 
@@ -257,7 +253,7 @@ var callAddItemFunctionOld = function() {
                 $('.result3').html();
             } //end success
     }); //end ajax
-}; //end function
+}; //end callAddItemFunctionOld
 
 var callBidOnItem = function(item) {
         'use strict';
@@ -278,8 +274,7 @@ var callBidOnItem = function(item) {
                 socket.emit('updateItem', item.ID());
             } //end success
     }); //end ajax
-
-};
+}; //end callBidOnItem
 
 
 var callAddItemFunction = function() {
@@ -307,7 +302,7 @@ var callAddItemFunction = function() {
     formData.append('itemBidPrice', itemBidPrice);
     console.log(itemBidPrice);
 
-    if (file !== null) {
+    if (file) {
         formData.append('itemImage', file.name);
         var error = 0;
         if (!file.type.match('image.*')) {
@@ -322,10 +317,6 @@ var callAddItemFunction = function() {
     } else {
         formData.append('itemImage', 'images.jpeg');
     }
-
-
-
-
     if (!error) {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'http://localhost:3000/additems', true);
@@ -344,11 +335,7 @@ var callAddItemFunction = function() {
             }
         };
     }
-};
-
-
-
-
+}; //end callAddItemFunction
 
 /**
  * Displays all items in user's list, for logged in user
@@ -365,7 +352,7 @@ var callShowListingsFor1User = function(jsonStr) {
         }
     });
 
-}; //end function
+}; //end callShowListingsFor1User
 
 /**
  * Displays all posted listings
@@ -388,7 +375,7 @@ var callShowAllListingsFunction = function() {
                 // addMovieToHtml(data);
             } //end success
     }); //end ajax
-}; //end function
+}; //end callShowAllListingsFunction
 
 var callGetInfoOfOneItemFunction = function(jsonStr) {
     'use strict';
@@ -403,7 +390,7 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
                 myViewModel.updateAnItem(data);
             } //end success
     }); //end ajax
-};
+}; //end callGetInfoOfOneItemFunction
 
 
 var updateItemView = function(itemList) {
@@ -413,7 +400,7 @@ var updateItemView = function(itemList) {
     for (var i = 0; i < itemList.length; i++) {
         myViewModel.addItem(itemList[i]);
     }
-};
+}; //end updateItemView
 
 var getOnlineUsers = function() {
   'use strict';
@@ -430,13 +417,11 @@ var getOnlineUsers = function() {
                 }
             } //end success
     }); //end ajax
-};
+}; //end getOnlineUsers
 
 
 var main = function() {
   'use strict';
-
-
 
     myViewModel = new AppViewModel();
     ko.applyBindings(myViewModel, document.getElementById('productList'));
