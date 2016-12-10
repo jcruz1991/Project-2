@@ -132,6 +132,11 @@ io.on('connection', function(socket) {
     socket.on('updateItem', function(itemID) {
         io.emit('updateItem', itemID);
     });
+
+    socket.on('itemDeleted', function() {
+        console.log('updateListing');
+        io.emit('updateListing');
+    });
 }); //end io.on
 
 /**

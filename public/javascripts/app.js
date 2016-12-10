@@ -145,16 +145,16 @@ var removeItem = function(itemToRemove) {
         contentType: 'application/json',
         url: 'http://localhost:3000/removeItem',
         success: function(deletedItem) {
-                console.log('successfully deleted item' + deletedItem);
-                //myViewModel.deleteUsersItem(deletedItem);
+            console.log('successfully deleted item' + deletedItem);
+            ko.utils.arrayForEach(myViewModel.items(), function(i) {
+                if (i.itemID() == itemToRemove.itemID()) {
+                    console.log('match found kekd');
+                    userListViewModel.userItemList.remove(i);
+                    myViewModel.items.remove(i);
+                    socket.emit('itemDeleted');
+               }
+            });
         }
-    });
-    ko.utils.arrayForEach(myViewModel.items(), function(i) {
-//         console.log(i.mUserName());
-        if (i.itemID() == itemToRemove.itemID()) {
-            console.log('match found kekd');
-            userListViewModel.userItemList.remove(i);
-       }
     });
 };
 var callSignUpFunction = function() {
@@ -389,6 +389,7 @@ var callShowAllListingsFunction = function() {
         success: function(data) {
                 console.log('success');
                 console.log(JSON.stringify(data));
+                myViewModel.items([]);
                 updateItemView(data.itemList);
 
                 // addMovieToHtml(data);
@@ -487,7 +488,7 @@ var main = function() {
     });
 
     socket.on('updateListing', function() {
-        console.log('Update listing');
+        console.log('Update listing cus item deleted');
         callShowAllListingsFunction();
     });
 
