@@ -45,7 +45,7 @@ function BiddingViewModel() {
             self.message('Please enter a bigger price');
         }
 
-    }; //end function submitBtn() 
+    }; //end function submitBtn()
 
     self.currentProduct = function(item) {
         self.Name(item.itemName());
@@ -55,7 +55,7 @@ function BiddingViewModel() {
         self.newBidPrice(self.currentBidPrice() + 1);
     }; //end function currentProduct()
 
-}//end function BiddingViewModel() 
+} //end function BiddingViewModel()
 
 function ItemViewModel() {
     'use strict';
@@ -217,7 +217,7 @@ var callLogInFunction = function() {
 }; //end callLogInFunction
 
 /**
- * 
+ *
  */
 var callAddItemFunctionOld = function() {
     'use strict';
@@ -256,7 +256,7 @@ var callAddItemFunctionOld = function() {
 }; //end callAddItemFunctionOld
 
 var callBidOnItem = function(item) {
-        'use strict';
+    'use strict';
     var jsonStr = JSON.stringify({
         'itemID': item.ID(),
         'bidPrice': item.currentBidPrice(),
@@ -394,7 +394,7 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
 
 
 var updateItemView = function(itemList) {
-  'use strict';
+    'use strict';
     console.log('itemlist inside update itemview is :');
     console.log(itemList);
     for (var i = 0; i < itemList.length; i++) {
@@ -403,7 +403,7 @@ var updateItemView = function(itemList) {
 }; //end updateItemView
 
 var getOnlineUsers = function() {
-  'use strict';
+    'use strict';
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -413,7 +413,7 @@ var getOnlineUsers = function() {
                 console.log('getONline success: ');
                 for (var i = 0; i < users.length; i++) {
                     $('#onlineUsers').append(
-                      $('<div class="small olUser header">').text(users[i]));
+                        $('<div class="small olUser header">').text(users[i]));
                 }
             } //end success
     }); //end ajax
@@ -421,7 +421,7 @@ var getOnlineUsers = function() {
 
 
 var main = function() {
-  'use strict';
+    'use strict';
 
     myViewModel = new AppViewModel();
     ko.applyBindings(myViewModel, document.getElementById('productList'));
@@ -430,8 +430,8 @@ var main = function() {
     ko.applyBindings(biddingViewModel, document.getElementById('biddingModal'));
 
     userListViewModel = new userListViewModel();
-    ko.applyBindings(userListViewModel, 
-                     document.getElementById('listOfUsersItems'));
+    ko.applyBindings(userListViewModel,
+        document.getElementById('listOfUsersItems'));
 
 
     // maybe change this to getlistings from online
@@ -444,7 +444,7 @@ var main = function() {
         // need to add user list
         console.log('user id received on clients: ' + userName);
         $('#onlineUsers').append(
-          $('<div class="small header">').text(userName));
+            $('<div class="small header">').text(userName));
     });
 
     socket.on('newItem', function(item) {
@@ -474,18 +474,20 @@ var main = function() {
 
     socket.on('updateItem', function(itemID) {
         console.log('updateItem' + itemID);
-        callGetInfoOfOneItemFunction(JSON.stringify({ 'itemID': itemID }));
+        callGetInfoOfOneItemFunction(JSON.stringify({
+            'itemID': itemID
+        }));
     });
 
     $('.right_menu2').hide();
     $('.right_menu1').show();
     $('.ui.sidebar').sidebar('toggle');
 
-    $('.about').click(function(){
+    $('.about').click(function() {
         $('.about_modal').modal('show');
     });
 
-    $('.contact').click(function(){
+    $('.contact').click(function() {
         $('.contact_modal').modal('show');
     });
 
@@ -627,14 +629,12 @@ var main = function() {
                 }]
             },
             terms: {
-            identifier : 'chck',
-            rules: [
-              {
-                type   : 'checked',
-                prompt : 'You must agree to the terms and conditions'
-              }
-            ]
-          }
+                identifier: 'chck',
+                rules: [{
+                    type: 'checked',
+                    prompt: 'You must agree to the terms and conditions'
+                }]
+            }
         }, //end fields
         onSuccess: function(event) {
                 callSignUpFunction();
@@ -659,8 +659,8 @@ var main = function() {
                     type: 'empty',
                     prompt: 'This field cannot be empty'
                 }, {
-                type: 'number',
-                prompt: 'this field should be numeric value'
+                    type: 'number',
+                    prompt: 'this field should be numeric value'
                 }]
             },
             itemBidPrice: {
@@ -669,8 +669,8 @@ var main = function() {
                     type: 'empty',
                     prompt: 'This field cannot be empty'
                 }, {
-                type: 'number',
-                prompt: 'this field should be numeric value'
+                    type: 'number',
+                    prompt: 'this field should be numeric value'
                 }]
             }
         }, //end fields
