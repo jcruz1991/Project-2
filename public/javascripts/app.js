@@ -516,7 +516,9 @@ var main = function() {
 
     });
 
+    // userlist modal
     $('.viewListing').click(function() {
+        $('.usersListings-modal').modal('show');
 
         var userID = $('span.userId').text();
         var jsonStr = JSON.stringify({
@@ -559,10 +561,6 @@ var main = function() {
     });
 
 
-    // Users Listings Modal
-    $('.viewUsersListings').on('click', function() {
-        $('.usersListings-modal').modal('show');
-    });
 
     $('.login_form').form({
         fields: {
