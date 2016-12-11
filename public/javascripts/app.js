@@ -89,17 +89,25 @@ function ItemViewModel() {
         self.itemCurrentBidPrice(item.itemCurrentBidPrice);
         self.itemTotalBids(item.itemTotalBids);
         self.itemLastBidder(item.itemLastBidder);
+        self.isSold(item.isSold);
     }; //end function newItem()
 
     self.updateItem = function(item) {
         self.itemCurrentBidPrice(item.itemCurrentBidPrice);
         self.itemLastBidder(item.itemLastBidder);
         self.itemTotalBids(item.itemTotalBids);
+        self.isSold(item.isSold);
     }; //end function updateItem()
     self.deleteItem = function() {
         console.log('delete item clicked');
         removeItem(self);
-    }
+    };
+
+    self.sellBtn = function() {
+        console.log("sell item");
+        onSellItem(self);
+        self.isSold(true);
+    };
 } //end ItemViewModel
 
 function AppViewModel() {
@@ -136,7 +144,7 @@ function userListViewModel() {
  */
 
 var removeItem = function(itemToRemove) {
-    var itemToDelete = JSON.stringify({'_id': itemToRemove.itemID()});
+    var itemToDelete = JSON.stringify({ '_id': itemToRemove.itemID() });
     console.log('inside removeItem');
     $.ajax({
         type: 'POST',
@@ -152,11 +160,30 @@ var removeItem = function(itemToRemove) {
                     userListViewModel.userItemList.remove(i);
                     myViewModel.items.remove(i);
                     socket.emit('itemDeleted');
-               }
+                }
             });
         }
     });
 };
+
+
+var onSellItem = function(item) {
+
+    var itemToSell = JSON.stringify({ '_id': item.itemID() });
+    $.ajax({
+        type: 'POST',
+        data: itemToSell,
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/sellItem',
+        success: function(sellItem) {
+            console.log('successfully sold item' + sellItem);
+            socket.emit('itemDeleted');
+            //myViewModel.deleteUsersItem(deletedItem);
+        }
+    });
+};
+
 var callSignUpFunction = function() {
     'use strict';
     var uname = document.getElementsByName('uname')[0].value;
@@ -314,6 +341,7 @@ var callAddItemFunction = function() {
     formData.append('itemDescription', itemDescription);
     formData.append('itemType', itemType);
     formData.append('userId', userID);
+    formData.append('isSold', false);
 
     if (itemBidPrice === null) {
         itemBidPrice = 0;

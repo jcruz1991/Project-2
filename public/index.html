@@ -242,8 +242,8 @@ Email- supra.chavan@gmail.com
                     <div class="meta">
                         <a>
                             <h3>
-                            $ <span data-bind='text: itemPrice'></span>
-                        </h3>
+                                $ <span data-bind='text: itemPrice'></span>
+                            </h3>
                         </a>
                         <div class="description">
                             Description: <span data-bind='text: itemDescription'></span>
@@ -329,13 +329,29 @@ Email- supra.chavan@gmail.com
                 </div>
                 <div id="listOfUsersItems" class="ui gray tertiary form_seg segment" data-bind='foreach: userItemList'>
                     <div class="ui grid">
-                        <div class="four wide column">
+                        <div class="two wide column">
                             <h3 class="teal usersItemsListing" data-bind="text: itemName"></h3>
                         </div>
-                        <div class="four wide column">
-                            <h3 class="teal currBids" data-bind="text: itemTotalBids">Current bids: </h3>
+                        <div class="two wide column">
+                            Bids:
+                            <h3 class="teal currBids" data-bind="text: itemTotalBids"></h3>
                         </div>
                         <div class="four wide column">
+                            Current BidPrice:
+                            <h3 class="teal usersItemsListing">$
+                                <a data-bind="text: itemCurrentBidPrice"></a>
+                            </h3>
+                        </div>
+                        <div class="two wide column">
+                            <div class="ui buttons" data-bind='ifnot: isSold'>
+                                <button class="ui right floated teal button" data-bind='click: sellBtn'>Sell  </button>
+                            </div>
+                            <div class='itemSold' data-bind='visible: isSold'>
+                                SOLD TO
+                                <a data-bind='text: itemLastBidder'></a>
+                            </div>
+                        </div>
+                        <div class="two wide column">
                             <div class="ui buttons">
                                 <button class="ui right floated teal button" data-bind="click: deleteItem">Delete</button>
                             </div>

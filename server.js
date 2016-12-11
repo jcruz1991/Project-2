@@ -68,7 +68,8 @@ var itemSchema = new mongoose.Schema({
     itemCurrentBidPrice: Number,
     itemTotalBids: Number,
     itemLastBidder: String,
-    itemImage: String
+    itemImage: String,
+    isSold: Boolean
 });
 
 var UserDb = mongoose.model('user', userSchema);
@@ -87,9 +88,9 @@ server.listen(port, function() {
 });
 
 /**
-*Functions that will be called as part of socket
-*for real time updates
-*/
+ *Functions that will be called as part of socket
+ *for real time updates
+ */
 io.on('connection', function(socket) {
     console.log('Not signed up user connected');
 
@@ -140,29 +141,56 @@ io.on('connection', function(socket) {
 }); //end io.on
 
 /**
-*Route for remove item from user's account
-*
-*/
+ *Route for remove item from user's account
+ *
+ */
 app.post('/removeItem', function(req, res) {
     console.log('remove item = ');
     console.log(req.body._id);
     //Remove items of the users from the database
-        ItemDb.remove({ _id: req.body._id}, function(err, item) {
-            if (err) {
-                console.log('error while delete an item');
-                res.json({ 'Result': 'Failed' });
-            } else {
-                
-                res.json({ 'Result': 'successful' });
-            }
-        });
+    ItemDb.remove({ _id: req.body._id }, function(err, item) {
+        if (err) {
+            console.log('error while delete an item');
+            res.json({ 'Result': 'Failed' });
+        } else {
+
+            res.json({ 'Result': 'successful' });
+        }
+    });
 
 });
 
 /**
-*Route for bidding on a posted item
-*
-*/
+ *Route for sell an item from user's account
+ *
+ */
+app.post('/sellItem', function(req, res) {
+    console.log('sell item = ');
+    console.log(req.body._id);
+
+    //Find the of the users from the database
+    ItemDb.findOne({ _id: req.body._id }, function(err, item) {
+        if (err) {
+            console.log('error while finding an item');
+            res.json({ 'Result': 'Failed' });
+        } else {
+
+            //Got the item, now update the isSold
+            ItemDb.update({ _id: req.body._id }, { isSold: true }, function(err, item) {
+                if (item) {
+                    console.log(item);
+                    res.json({ 'Result': 'successful' });
+                }
+            });
+        }
+    });
+});
+
+
+/**
+ *Route for bidding on a posted item
+ *
+ */
 app.post('/bidOnItem', function(req, res) {
     console.log('user bids on an item');
 
@@ -171,12 +199,15 @@ app.post('/bidOnItem', function(req, res) {
         var userName = req.body.userName;
         var bidPrice = req.body.bidPrice;
         var newTotalBids = item.itemTotalBids + 1;
+        var iterestedUsers = item.mInterestedUsers;
+        iterestedUsers.push(userName);
 
         //Update the item
         ItemDb.update({ _id: req.body.itemID }, {
             itemCurrentBidPrice: bidPrice,
             itemTotalBids: newTotalBids,
-            itemLastBidder: userName
+            itemLastBidder: userName,
+            mInterestedUsers: iterestedUsers
         }, function(err, success) {
             if (err) {
                 console.log('Error when update item');
@@ -191,9 +222,9 @@ app.post('/bidOnItem', function(req, res) {
 
 
 /*
-*Rote to retrieve information for specific item
-*
-*/
+ *Rote to retrieve information for specific item
+ *
+ */
 app.post('/itemInfo', function(req, res) {
     ItemDb.findOne({ _id: req.body.itemID }, function(err, item) {
         if (item) {
@@ -231,7 +262,7 @@ app.post('/signup', function(req, res) {
             res.json('user already exists, please try again with diffrent user name');
         }
     }); //end findOne
-});//end post
+}); //end post
 
 /**
  * Route for login functionality for registered user
@@ -252,7 +283,7 @@ app.post('/login', function(req, res) {
                 res.json({ 'username': req.body.username1, 'userid': user._id });
             }
         }
-    });//end findOne
+    }); //end findOne
 }); //end post
 
 /**
@@ -276,8 +307,7 @@ app.post('/additems', function(req, res) {
             // Location where we want to copy the uploaded file
             var new_location = 'public/images/';
 
-            fs.copy(temp_path, new_location + file_name, function(err) 
-            {
+            fs.copy(temp_path, new_location + file_name, function(err) {
                 if (err) {
                     console.error(err);
                 } else {
@@ -303,6 +333,7 @@ app.post('/additems', function(req, res) {
                                 itemType: req.body.itemType,
                                 mUserName: uName,
                                 mUserId: req.body.userId,
+								isSold: req.body.isSold,
                                 itemCurrentBidPrice: req.body.itemBidPrice,
                                 itemImage: req.body.itemImage,
                                 itemTotalBids: 0,
@@ -347,6 +378,7 @@ app.post('/additems', function(req, res) {
                         itemType: req.body.itemType,
                         mUserName: uName,
                         mUserId: req.body.userId,
+						isSold: req.body.isSold,
                         itemCurrentBidPrice: req.body.itemBidPrice,
                         itemImage: req.body.itemImage,
                         itemTotalBids: 0,
@@ -414,4 +446,4 @@ app.get('/ShowAll', function(req, res) {
  */
 app.get('/users', function(req, res) {
     res.json(onlineUsers);
-});//end get
+}); //end get
