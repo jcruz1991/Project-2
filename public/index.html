@@ -351,7 +351,7 @@ Email- supra.chavan@gmail.com
                             </h3>
                         </div>
                         <div class="two wide column">
-                            <div class="ui buttons" data-bind='ifnot: isSold'>
+                            <div class="ui buttons" data-bind='ifnot: isSold, visible: itemTotalBids() > 0'>
                                 <button class="ui right floated teal button" data-bind='click: sellBtn'>Sell  </button>
                             </div>
                             <div class='itemSold' data-bind='visible: isSold'>
