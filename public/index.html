@@ -337,14 +337,14 @@ Email- supra.chavan@gmail.com
                 </div>
                 <div id="listOfUsersItems" class="ui gray tertiary form_seg segment" data-bind='foreach: userItemList'>
                     <div class="ui grid">
-                        <div class="two wide column">
+                        <div class="three wide column">
                             <h3 class="teal usersItemsListing" data-bind="text: itemName"></h3>
                         </div>
                         <div class="two wide column">
                             Bids:
                             <h3 class="teal currBids" data-bind="text: itemTotalBids"></h3>
                         </div>
-                        <div class="four wide column">
+                        <div class="three wide column">
                             Current BidPrice:
                             <h3 class="teal usersItemsListing">$
                                 <a data-bind="text: itemCurrentBidPrice"></a>
@@ -357,6 +357,7 @@ Email- supra.chavan@gmail.com
                             <div class='itemSold' data-bind='visible: isSold'>
                                 SOLD TO
                                 <a data-bind='text: itemLastBidder'></a>
+                                <a data-bind='text: email'></a>
                             </div>
                         </div>
                         <div class="two wide column">
@@ -385,12 +386,18 @@ Email- supra.chavan@gmail.com
                 </div>
                 <div id="listOfBidItems" class="ui gray tertiary form_seg segment" data-bind='foreach: bidItemList'>
                     <div class="ui grid">
-                        <div class="four wide column">
+                        <div class="five wide column">
                             <h3 class="teal usersItemsListing" data-bind="text: itemName"></h3>
                         </div>
-                        <div class="eight wide column">
+                        <div class="seven wide column">
                             Status:
                             <h3 class="teal currBids" data-bind="text: Message"></h3>
+                            <a data-bind="text: email"></a>
+                            <div data-bind='ifnot: isSold'>
+                                <div class="ui bid teal medium button" data-bind='click: biddingBtn'>
+                                    Place Bid
+                                </div>
+                            </div>
                         </div>
 
                     </div>

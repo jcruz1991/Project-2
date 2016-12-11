@@ -80,9 +80,12 @@ function ItemViewModel() {
     self.itemLastBidder = ko.observable('');
     self.isSold = ko.observable(false);
     self.interestedUsers = ko.observableArray();
+    self.email = ko.observable();
     self.biddingBtn = function() {
         if (userG === '') {
             alert('Please log in first before bidding');
+        } else if (userG === self.mUserName()) {
+            alert('You cannot bid on your own item');
         } else {
             biddingViewModel.currentProduct(self);
             $('.bidding-modal').modal('show');
@@ -189,7 +192,6 @@ var removeItem = function(itemToRemove) {
  *
  */
 var onSellItem = function(item) {
-
     var itemToSell = JSON.stringify({ '_id': item.itemID() });
     $.ajax({
         type: 'POST',
@@ -200,7 +202,6 @@ var onSellItem = function(item) {
         success: function(sellItem) {
             console.log('successfully sold item' + sellItem);
             socket.emit('itemDeleted');
-            //myViewModel.deleteUsersItem(deletedItem);
         }
     });
 };
@@ -343,7 +344,6 @@ var callAddItemFunction = function() {
         itemBidPrice = 0;
     }
     formData.append('itemBidPrice', itemBidPrice);
-    console.log(itemBidPrice);
 
     if (file) {
         formData.append('itemImage', file.name);
@@ -391,6 +391,7 @@ var callShowListingsFor1User = function(jsonStr) {
     ko.utils.arrayForEach(myViewModel.items(), function(i) {
         console.log(i.mUserName());
         if (i.mUserName() === userG) {
+            callGetUserInfoFunction(i, i.itemLastBidder());
             userListViewModel.userItemList.push(i);
         }
     });
@@ -413,11 +414,14 @@ var callShowUserBidOnItems = function() {
                     if (i.isSold()) {
                         if (i.itemLastBidder() === userG) {
                             i.Message = "You have won the item. Contact " + i.mUserName();
+                            callGetUserInfoFunction(i, i.mUserName());
                         } else {
                             i.Message = "You have lost the item."
+                            i.mUserName("");
                         }
                     } else {
                         i.Message = "Item is still on sale";
+                        i.mUserName("");
                     }
                     userBidOnViewModel.bidItemList.push(i);
                     break;
@@ -443,7 +447,6 @@ var callShowAllListingsFunction = function() {
         url: 'http://localhost:3000/ShowAll',
         success: function(data) {
                 console.log('success');
-                console.log(JSON.stringify(data));
                 myViewModel.items([]);
                 updateItemView(data.itemList);
 
@@ -467,6 +470,26 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
         success: function(data) {
                 console.log('success');
                 myViewModel.updateAnItem(data);
+            } //end success
+    }); //end ajax
+}; //end callGetInfoOfOneItemFunction
+
+
+/**
+ *
+ *
+ */
+var callGetUserInfoFunction = function(item, userName) {
+    'use strict';
+    var jsonStr = JSON.stringify({ 'userName': userName });
+    $.ajax({
+        type: 'POST',
+        data: jsonStr,
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/userInfo',
+        success: function(data) {
+                item.email(data.email);
             } //end success
     }); //end ajax
 }; //end callGetInfoOfOneItemFunction

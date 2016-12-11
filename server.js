@@ -146,7 +146,6 @@ io.on('connection', function(socket) {
  */
 app.post('/removeItem', function(req, res) {
     console.log('remove item = ');
-    console.log(req.body._id);
     //Remove items of the users from the database
     ItemDb.remove({ _id: req.body._id }, function(err, item) {
         if (err) {
@@ -157,7 +156,20 @@ app.post('/removeItem', function(req, res) {
             res.json({ 'Result': 'successful' });
         }
     });
+});
 
+/**
+ *Route for getting an user's email
+ *
+ */
+app.post('/userInfo', function(req, res) {
+    console.log("Get user info");
+    UserDb.findOne({ userName: req.body.userName }, function(err, user) {
+        if (user) {
+            console.log("Found user " + user.userName);
+            res.json({ 'Result': 'successful', 'email': user.email });
+        }
+    });
 });
 
 /**
@@ -166,7 +178,6 @@ app.post('/removeItem', function(req, res) {
  */
 app.post('/sellItem', function(req, res) {
     console.log('sell item = ');
-    console.log(req.body._id);
 
     //Find the of the users from the database
     ItemDb.findOne({ _id: req.body._id }, function(err, item) {
