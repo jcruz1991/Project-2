@@ -413,15 +413,15 @@ var callShowUserBidOnItems = function() {
                 if (i.interestedUsers()[index] === userG) {
                     if (i.isSold()) {
                         if (i.itemLastBidder() === userG) {
-                            i.Message = "You have won the item. Contact " + i.mUserName();
+                            i.Message = 'You have won the item. Contact ' + i.mUserName();
                             callGetUserInfoFunction(i, i.mUserName());
                         } else {
-                            i.Message = "You have lost the item."
-                            i.mUserName("");
+                            i.Message = 'You have lost the item.';
+                            i.email('');
                         }
                     } else {
-                        i.Message = "Item is still on sale";
-                        i.mUserName("");
+                        i.Message = 'Item is still on sale';
+                        i.email('');
                     }
                     userBidOnViewModel.bidItemList.push(i);
                     break;
