@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--
-client side html
+File-index.html
 CPSC 473 Project 2: Titan-bay (CSUF Craigslist)
 Submitted by-
     Julio Cruz
@@ -13,7 +13,6 @@ Email- supra.chavan@gmail.com
 -->
 
 <html>
-
 <head>
     <title>Titan-bay</title>
     <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
@@ -68,7 +67,7 @@ Email- supra.chavan@gmail.com
             <div class="computer tablet only row">
                 <div class="ui inverted fixed menu navbar page grid">
                     <div class="brand item">
-                        <img class="ui small image left floated" src="/images/IMG_0405.jpg" alt="logo image">
+                        <img class="ui small image" src="/images/IMG_0405.JPG" alt="logo image">
                     </div>
                     <div class="about item">About</div>
                     <div class="contact item">Contact Us</div>
@@ -91,10 +90,11 @@ Email- supra.chavan@gmail.com
                             </div>
                         </div>
                         <!--END right_menu1-->
+
                         <div class="right right_menu2 menu">
                             <div class="item">
                                 <div class="ui left labeled button" tabindex="0">
-                                    <a class="ui basic right pointing label"></a>
+                                    <div class="ui basic right pointing userlbl label"></div>
                                     <div class="ui teal profile button">
                                         <i class="log out icon"></i>My Profile
                                     </div>
@@ -103,7 +103,8 @@ Email- supra.chavan@gmail.com
                             </div>
                         </div>
                     </div>
-                    <!--END right_menu-->
+                    <!--END right_menu2-->
+
                 </div>
                 <!--END grid-->
             </div>
@@ -221,10 +222,11 @@ Email- supra.chavan@gmail.com
                         </div>
                     </div>
                     <div class="field">
-                        <label>Product Description</label>
+                        <label>Product Description (Optional but recommended)</label>
                         <textarea class="itemDescription" rows="3" placeholder="Enter description for product"></textarea>
                     </div>
                     <div class="field">
+                    	<label>Upload Image (Optional but recommended)</label>
                         <input type="file" id="image" name="image" accept="Image/*" class="itemImage">
                     </div>
                     <div class="field">
@@ -246,42 +248,42 @@ Email- supra.chavan@gmail.com
                     <img data-bind='attr: {src : itemImage}' alt="listing image">
                 </a>
                 <div class="content">
-                    <a class="teal header" href="#" data-bind='text: itemName'>PRODUCT 1</a>
+                    <h2 class="ui teal header" data-bind='text: itemName'>PRODUCT 1</h2>
                     <div class="meta">
-                        <a>
-                            <h3>
-                                $ <span data-bind='text: itemPrice'></span>
+                        <div>
+                            <h3 class="ui gray header">Price: $ 
+                            	<span data-bind='text: itemPrice'></span>
                             </h3>
-                        </a>
-                        <div class="description">
-                            Description: <span data-bind='text: itemDescription'></span>
                         </div>
-                        <div class="postedBy">Posted By : <span data-bind='text: mUserName'></span>
-                        </div>
-                    </div>
-                    <div class='biddingSection'>
-                        <div data-bind='ifnot: isSold'>
-                            <a class='totalBidders'>
-                                <span data-bind='text: itemTotalBids'></span> Bids
-                            </a>
-                            <div class="ui bid teal medium button" data-bind='click: biddingBtn'>
-                                Place Bid
-                            </div>
-                        </div>
-                        <a class='itemSold' data-bind='visible: isSold'> SOLD</a>
                     </div>
                 </div>
+                <div class="extra content">
+                	<h5 class="ui gray postedBy header">Posted By : 
+                		<span data-bind='text: mUserName'></span>
+                    </h5>
+                	<h5 class="ui gray description header">
+                    	Description: <span data-bind='text: itemDescription'></span>
+                    </h5>
+                </div>
+                <div class='extra content biddingSection'>
+                    <div data-bind='ifnot: isSold'>
+                    	<div class="ui right labeled button" tabindex="0">
+                    		<div class='totalBidders ui basic right pointing label'>
+                                <span data-bind='text: itemTotalBids'></span> Bids
+                            </div>
+                            <div class="ui bid teal button" data-bind='click: biddingBtn'>Place Bid</div>
+                    	</div>
+                    </div>
+                    <h3 class='ui teal itemSold header' data-bind='visible: isSold'>Status: Sold Out</h3>
+                </div>
             </div>
-
         </div>
         <!-- END OF PRODUCTS LIST -->
 
         <!-- ITEMS MODAL -->
         <div class="ui product_modal modal">
             <i class="close icon"></i>
-            <div class="ui large center aligned header">
-                Item Name
-            </div>
+            <div class="ui large center aligned header">Item Name</div>
             <div class="image content">
                 <div class="ui medium image">
                     <img src="https://placehold.it/300x200" alt="listing image">
@@ -292,12 +294,9 @@ Email- supra.chavan@gmail.com
                 </div>
             </div>
             <div class="actions">
-                <div class="ui bid teal button">
-                    Bid
-                </div>
-                <div class="ui buyItem positive right labeled icon button">
-                    Buy
-                    <i class="cart icon"></i>
+                <div class="ui bid teal button">Bid</div>
+                <div class="ui buyItem positive right labeled icon button">Buy
+                	<i class="cart icon"></i>
                 </div>
             </div>
         </div>
@@ -306,61 +305,59 @@ Email- supra.chavan@gmail.com
         <!-- BIDDING MODAL-->
         <div class="ui bidding-modal small modal" id='biddingModal'>
             <div class="ui relaxed divided list">
-                <div class="ui large center aligned header" data-bind='text: Name'>
-                    Item Name
-                </div>
+                <div class="ui large center aligned header" data-bind='text: Name'>Item Name</div>
                 <div class="item">
                     <div class="content">
-                        Last Bidder: <a class="header" data-bind='text: lastBidder'>Veronika Ossi</a>
-                        <div class="description">
-                            Current Bidding Price: $ <a data-bind='text: currentBidPrice'>$15.00</a>
-                        </div>
+                    	<h4 class="ui gray header">Last Bidder: 
+                            <span data-bind='text: lastBidder'></span>
+                        </h4> 
+                    	<h4 class="ui gray header">Current Bidding Price: $
+                            <span data-bind='text: currentBidPrice'></span>
+                        </h4>
                     </div>
                 </div>
             </div>
             <div class="ui left action input">
                 <input type="text" placeholder="$0.00" data-bind='value: newBidPrice'>
                 <button class="ui teal labeled icon button" data-bind='click: submitBtn'>
-                <i class="share icon"></i>Submit Bid
-            </button>
+                	<i class="share icon"></i>Submit Bid
+            	</button>
             </div>
-            <a data-bind='text: message'>
-            </a>
+            <a data-bind='text: message'></a>
         </div>
         <!-- END OF BIDDING MODAL -->
 
         <!-- Users Listings MODAL -->
         <div class="ui usersListings-modal small modal">
             <div class="ui segment" id="userItemsListings">
-                <div class="ui large center aligned teal header">
-                    Your Listings
-                </div>
+                <div class="ui large center aligned teal header">Your Listings</div>
                 <div id="listOfUsersItems" class="ui gray tertiary form_seg segment" data-bind='foreach: userItemList'>
                     <div class="ui grid">
                         <div class="three wide column">
-                            <h3 class="teal usersItemsListing" data-bind="text: itemName"></h3>
+                            <h4 class="ui gray usersItemsListing header" data-bind="text: itemName"></h4>
                         </div>
                         <div class="two wide column">
-                            Bids:
-                            <h3 class="teal currBids" data-bind="text: itemTotalBids"></h3>
+                            <h4 class="ui gray header">Bids: 
+                            	<span class="currBids" data-bind='text: itemTotalBids'></span>
+                            </h4>
                         </div>
-                        <div class="three wide column">
-                            Current BidPrice:
-                            <h3 class="teal usersItemsListing">$
-                                <a data-bind="text: itemCurrentBidPrice"></a>
-                            </h3>
+                        <div class="four wide column">
+                            <h4 class="ui gray usersItemsListing header">BidPrice: $
+                                <span data-bind="text: itemCurrentBidPrice"></span>
+                            </h4>
                         </div>
-                        <div class="two wide column">
+                        <div class="four wide column">
                             <div class="ui buttons" data-bind='ifnot: isSold, visible: itemTotalBids() > 0'>
-                                <button class="ui right floated teal button" data-bind='click: sellBtn'>Sell  </button>
+                                <button class="ui right floated teal button" data-bind='click: sellBtn'>Sell</button>
                             </div>
                             <div class='itemSold' data-bind='visible: isSold'>
-                                SOLD TO
-                                <a data-bind='text: itemLastBidder'></a>
-                                <a data-bind='text: email'></a>
+                                 <h4 class="ui gray header">Sold to:
+                                	<span data-bind='text: itemLastBidder'></span>
+                                	<span data-bind='text: email'></span>
+                                </h4>
                             </div>
                         </div>
-                        <div class="two wide column">
+                        <div class="three wide column">
                             <div class="ui buttons">
                                 <button class="ui right floated teal button" data-bind="click: deleteItem">Delete</button>
                             </div>
@@ -374,29 +371,26 @@ Email- supra.chavan@gmail.com
         <!-- Items I bid on MODAL -->
         <div class="ui itemsbidon-modal small modal">
             <div class="ui segment" id="itemsbidonList">
-                <div class="ui large center aligned teal header">
-                    Listings you are bidding on..
-                </div>
+                <div class="ui large center aligned teal header">Listings you are bidding on..</div>
                 <div id="listOfBidItems" class="ui gray tertiary form_seg segment" data-bind='foreach: bidItemList'>
                     <div class="ui grid">
                         <div class="five wide column">
-                            <h3 class="teal usersItemsListing" data-bind="text: itemName"></h3>
+                            <h4 class="ui usersItemsListing header" data-bind="text: itemName"></h4>
                         </div>
                         <div class="seven wide column">
-                            Status:
-                            <h3 class="teal currBids" data-bind="text: Message"></h3>
-                            <a data-bind="text: email"></a>
-                            <div data-bind='ifnot: isSold'>
-                                <div class="ui bid teal medium button" data-bind='click: biddingBtn'>
-                                    Place Bid
-                                </div>
+                            <h4 class="ui header">Status: 
+                            	<span class="currBids" data-bind="text: Message"></span>
+                            	<span data-bind="text: email"></span>
+                            </h4>
+                        </div>
+                        <div class="three wide column">
+                        	 <div data-bind='ifnot: isSold'>
+                                <div class="ui bid teal button" data-bind='click: biddingBtn'>Place Bid</div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-            <!-- </div> -->
         </div>
         <!-- END ITEMS I BID ON MODAL -->
 
@@ -406,7 +400,8 @@ Email- supra.chavan@gmail.com
                 <h2 class="ui teal header">About us..</h2>
                 <div class="ui segment">
                     <p>Titan-bay is a one-stop-shop where anyone with a valid CSU Fullerton email address can sell the stuff that they no longer need. post your listings and we will help you connect with interested buyers. For buyers, if you want to haggle,
-                        this is the perfect place for you. Just place a bid on your favourite listing and wait for the seller to get in touch with you. Hey, but keep a watch on other bidders as they might steal your chance!</p>
+                        this is the perfect place for you. Just place a bid on your favourite listing and wait for the seller to get in touch with you. Hey, but keep a watch on other bidders as they might steal your chance!
+                    </p>
                 </div>
             </div>
         </div>
@@ -431,6 +426,7 @@ Email- supra.chavan@gmail.com
         </div>
         <!-- END OF FOOTER -->
     </div>
+    <!-- END PUSHER -->
 
     <!-- SCRIPTS -->
     <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>

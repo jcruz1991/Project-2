@@ -23,6 +23,32 @@ var userBidOnViewModel;
 var userG = '';
 
 /**
+ *Bid item functionality for logged in user
+ *Input- sent as JSON data
+ *Output- returns updated item ID.
+ */
+var callBidOnItem = function(item) {
+    'use strict';
+    var jsonStr = JSON.stringify({
+        'itemID': item.ID(),
+        'bidPrice': item.currentBidPrice(),
+        'userName': item.lastBidder()
+    });
+    $.ajax({
+        type: 'POST',
+        data: jsonStr,
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/bidOnItem',
+        success: function(data) {
+                // emit item is bid
+                console.log(data.Result);
+                socket.emit('updateItem', item.ID());
+            } //end success
+    }); //end ajax
+}; //end callBidOnItem
+
+/**
  *Knockout viewmodel for placing bid on listing for logged in user
  *calls function callBidOnItem
  */
@@ -38,7 +64,6 @@ function BiddingViewModel() {
     self.ID = ko.observable();
 
     self.submitBtn = function() {
-
         console.log('submit bidding' + self.newBidPrice());
         var newPrice = self.newBidPrice();
         if (newPrice > self.currentBidPrice()) {
@@ -49,7 +74,6 @@ function BiddingViewModel() {
         } else {
             self.message('Please enter a bigger price');
         }
-
     }; //end function submitBtn()
 
     self.currentProduct = function(item) {
@@ -59,8 +83,54 @@ function BiddingViewModel() {
         self.lastBidder(item.itemLastBidder());
         self.newBidPrice(self.currentBidPrice() + 1);
     }; //end function currentProduct()
-
 } //end function BiddingViewModel()
+
+/**
+ *Delete listing functionality for a logged in user
+ *
+ */
+var removeItem = function(itemToRemove) {
+    'use strict';
+    var itemToDelete = JSON.stringify({ '_id': itemToRemove.itemID() });
+    console.log('inside removeItem');
+    $.ajax({
+        type: 'POST',
+        data: itemToDelete,
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/removeItem',
+        success: function(deletedItem) {
+                console.log('successfully deleted item' + deletedItem);
+                ko.utils.arrayForEach(myViewModel.items(), function(i) {
+                    if (i.itemID() === itemToRemove.itemID()) {
+                        userListViewModel.userItemList.remove(i);
+                        myViewModel.items.remove(i);
+                        socket.emit('itemDeleted');
+                    }
+                }); //end arrayForEach
+            } //end success
+    }); //end ajax
+}; //end removeItem
+
+/**
+ *Functionality to sell item/listing called on sellBtn click 
+ *
+ */
+var onSellItem = function(item) {
+    'use strict';
+    var itemToSell = JSON.stringify({ '_id': item.itemID() });
+    $.ajax({
+        type: 'POST',
+        data: itemToSell,
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/sellItem',
+        success: function(sellItem) {
+            //succesfully sold item, emit to others
+            socket.emit('itemDeleted');
+        } //end success
+    }); //end ajax
+}; //end onSellItem
 
 /**
  *knockout viewmodel for displaying/updating listings/items on home page
@@ -98,7 +168,7 @@ function ItemViewModel() {
     };
 
     self.sellBtn = function() {
-        console.log("sell item");
+        console.log('sell item');
         onSellItem(self);
         self.isSold(true);
     };
@@ -124,7 +194,7 @@ function ItemViewModel() {
         self.isSold(item.isSold);
         self.interestedUsers(item.mInterestedUsers);
     }; //end function updateItem()
-}; //end ItemViewModel
+} //end ItemViewModel
 
 /**
  *knockout viewmodel for updating the list of products/listings
@@ -149,61 +219,19 @@ function AppViewModel() {
             }
         });
     };
-}; //end AppViewModel
+} //end AppViewModel
 
 function UserListViewModel() {
+    'use strict';
     var self = this;
     self.userItemList = ko.observableArray();
-}; //end userListViewModel()
+} //end userListViewModel()
 
 function UserBidOnViewModel() {
+    'use strict';
     var self = this;
     self.bidItemList = ko.observableArray();
 }
-/**
- *Delete listing functionality for a logged in user
- *
- */
-var removeItem = function(itemToRemove) {
-    var itemToDelete = JSON.stringify({ '_id': itemToRemove.itemID() });
-    console.log('inside removeItem');
-    $.ajax({
-        type: 'POST',
-        data: itemToDelete,
-        dataType: 'json',
-        contentType: 'application/json',
-        url: 'http://localhost:3000/removeItem',
-        success: function(deletedItem) {
-                console.log('successfully deleted item' + deletedItem);
-                ko.utils.arrayForEach(myViewModel.items(), function(i) {
-                    if (i.itemID() == itemToRemove.itemID()) {
-                        userListViewModel.userItemList.remove(i);
-                        myViewModel.items.remove(i);
-                        socket.emit('itemDeleted');
-                    }
-                }); //end arrayForEach
-            } //end success
-    }); //end ajax
-}; //end removeItem
-
-/**
- *
- *
- */
-var onSellItem = function(item) {
-    var itemToSell = JSON.stringify({ '_id': item.itemID() });
-    $.ajax({
-        type: 'POST',
-        data: itemToSell,
-        dataType: 'json',
-        contentType: 'application/json',
-        url: 'http://localhost:3000/sellItem',
-        success: function(sellItem) {
-            //succesfully sold item, emit to others
-            socket.emit('itemDeleted');
-        }
-    });
-};
 
 /**
  * Sign up functionality for first time user
@@ -250,7 +278,6 @@ var callLogInFunction = function() {
         'username1': ulname,
         'password1': pwd
     });
-
     $.ajax({
         type: 'POST',
         data: jsonStr,
@@ -271,14 +298,13 @@ var callLogInFunction = function() {
                     $('.login_modal').modal('hide');
 
                     $('.right_menu1').hide();
-                    $('.pointing.label').text(
+                    $('.userlbl').text(
                         'Welcome ' + data.username);
 
                     $('.userHeader').text('Welcome ' + data.username);
                     $('.userId').text(data.userid);
                     console.log(data.userid);
                     $('.userId').hide();
-
                     $('.right_menu2').show();
                     $('.ui.sidebar').sidebar('toggle');
                 } //end else
@@ -286,35 +312,10 @@ var callLogInFunction = function() {
     }); //end ajax
 }; //end callLogInFunction
 
-
 /**
- *
- *
- */
-var callBidOnItem = function(item) {
-    'use strict';
-    var jsonStr = JSON.stringify({
-        'itemID': item.ID(),
-        'bidPrice': item.currentBidPrice(),
-        'userName': item.lastBidder()
-    });
-    $.ajax({
-        type: 'POST',
-        data: jsonStr,
-        dataType: 'json',
-        contentType: 'application/json',
-        url: 'http://localhost:3000/bidOnItem',
-        success: function(data) {
-                // emit item is bid
-                console.log(data.Result);
-                socket.emit('updateItem', item.ID());
-            } //end success
-    }); //end ajax
-}; //end callBidOnItem
-
-/**
- *
- *
+ *Add item/create new listing functionality for logged in user
+ *Input- form data
+ *Output- success/error message
  */
 var callAddItemFunction = function() {
     'use strict';
@@ -366,111 +367,21 @@ var callAddItemFunction = function() {
                 var response = JSON.parse(xhr.responseText);
                 socket.emit('newItemAdded', response);
 
-                $('.result3').html(xhr.responseText);
+                // $('.result3').html(xhr.responseText);
                 $('.additem_form').trigger('reset');
-                $('.result3').html();
+                $('.result3').html('Listing created successfully');
             } else {
                 console.log('<p> Error in upload, try again.</p>');
+                $('.result3').html('Error in upload, try again.');
             }
         };
     }
 }; //end callAddItemFunction
 
 /**
- * Displays all items in user's list, for logged in user
- * Input- user id in JSON format as argument jsonStr
- */
-var callShowListingsFor1User = function(jsonStr) {
-    'use strict';
-    // $('.movie_seg').empty();
-    userListViewModel.userItemList([]);
-    ko.utils.arrayForEach(myViewModel.items(), function(i) {
-        console.log(i.mUserName());
-        if (i.mUserName() === userG) {
-            callGetUserInfoFunction(i, i.itemLastBidder());
-            userListViewModel.userItemList.push(i);
-        }
-    });
-
-}; //end callShowListingsFor1User
-
-/**
- * Displays all items that user is bidded on, for logged in user
- * Input- user id in JSON format as argument jsonStr
- */
-var callShowUserBidOnItems = function() {
-    'use strict';
-    // $('.movie_seg').empty();
-    userBidOnViewModel.bidItemList([]);
-    ko.utils.arrayForEach(myViewModel.items(), function(i) {
-        if (i.interestedUsers() !== null) {
-            var index = 0;
-            for (index; index < i.interestedUsers().length; index++) {
-                if (i.interestedUsers()[index] === userG) {
-                    if (i.isSold()) {
-                        if (i.itemLastBidder() === userG) {
-                            i.Message = 'You have won the item. Contact ' + i.mUserName();
-                            callGetUserInfoFunction(i, i.mUserName());
-                        } else {
-                            i.Message = 'You have lost the item.';
-                            i.email('');
-                        }
-                    } else {
-                        i.Message = 'Item is still on sale';
-                        i.email('');
-                    }
-                    userBidOnViewModel.bidItemList.push(i);
-                    break;
-                }
-            }
-        }
-    });
-
-}; //end callShowUserBidOnItems
-
-/**
- * Displays all posted listings
- * Input- None
- * Output- on success, returns listing information as data
- */
-var callShowAllListingsFunction = function() {
-    'use strict';
-    $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        contentType: 'application/json',
-        url: 'http://localhost:3000/ShowAll',
-        success: function(data) {
-                myViewModel.items([]);
-                updateItemView(data.itemList);
-
-                // addMovieToHtml(data);
-            } //end success
-    }); //end ajax
-}; //end callShowAllListingsFunction
-
-/**
- *
- *
- */
-var callGetInfoOfOneItemFunction = function(jsonStr) {
-    'use strict';
-    $.ajax({
-        type: 'POST',
-        data: jsonStr,
-        dataType: 'json',
-        contentType: 'application/json',
-        url: 'http://localhost:3000/itemInfo',
-        success: function(data) {
-                myViewModel.updateAnItem(data);
-            } //end success
-    }); //end ajax
-}; //end callGetInfoOfOneItemFunction
-
-
-/**
- *
- *
+ *Functionality to get information of 1 user
+ *Input- item/listing and username
+ *Output- email address of user
  */
 var callGetUserInfoFunction = function(item, userName) {
     'use strict';
@@ -488,7 +399,57 @@ var callGetUserInfoFunction = function(item, userName) {
 }; //end callGetInfoOfOneItemFunction
 
 /**
- *
+ * Displays all items in user's list, for logged in user
+ * Input- user id in JSON format as argument jsonStr
+ */
+var callShowListingsFor1User = function(jsonStr) {
+    'use strict';
+    userListViewModel.userItemList([]);
+    ko.utils.arrayForEach(myViewModel.items(), function(i) {
+        console.log(i.mUserName());
+        if (i.mUserName() === userG) {
+            callGetUserInfoFunction(i, i.itemLastBidder());
+            userListViewModel.userItemList.push(i);
+        }
+    });
+
+}; //end callShowListingsFor1User
+
+/**
+ * Displays all items that user is bidded on, for logged in user
+ * Input- user id in JSON format as argument jsonStr
+ */
+var callShowUserBidOnItems = function() {
+    'use strict';
+    userBidOnViewModel.bidItemList([]);
+    ko.utils.arrayForEach(myViewModel.items(), function(i) {
+        if (i.interestedUsers() !== null) {
+            var index = 0;
+            for (index; index < i.interestedUsers().length; index++) {
+                if (i.interestedUsers()[index] === userG) {
+                    if (i.isSold()) {
+                        if (i.itemLastBidder() === userG) {
+                            i.Message = 'You have won the item. Contact ' +
+                              i.mUserName();
+                            callGetUserInfoFunction(i, i.mUserName());
+                        } else {
+                            i.Message = 'You have lost the item.';
+                            i.email('');
+                        }
+                    } else {
+                        i.Message = 'Item is still on sale';
+                        i.email('');
+                    }
+                    userBidOnViewModel.bidItemList.push(i);
+                    break;
+                } //end outer-if
+            } //end for
+        } //end outermost if
+    }); //end arrayForEach
+}; //end callShowUserBidOnItems
+
+/**
+ *Function to update the list of item/listings
  *
  */
 var updateItemView = function(itemList) {
@@ -499,7 +460,45 @@ var updateItemView = function(itemList) {
 }; //end updateItemView
 
 /**
- *
+ * Displays all posted listings
+ * Input- None
+ * Output- on success, returns listing information as data
+ */
+var callShowAllListingsFunction = function() {
+    'use strict';
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/ShowAll',
+        success: function(data) {
+                myViewModel.items([]);
+                updateItemView(data.itemList);
+            } //end success
+    }); //end ajax
+}; //end callShowAllListingsFunction
+
+/**
+ *Functionality to get information of 1 specific item/listing
+ *Input- JSON data
+ *Output- item/listing information
+ */
+var callGetInfoOfOneItemFunction = function(jsonStr) {
+    'use strict';
+    $.ajax({
+        type: 'POST',
+        data: jsonStr,
+        dataType: 'json',
+        contentType: 'application/json',
+        url: 'http://localhost:3000/itemInfo',
+        success: function(data) {
+                myViewModel.updateAnItem(data);
+            } //end success
+    }); //end ajax
+}; //end callGetInfoOfOneItemFunction
+
+/**
+ *Function to retrieve the list of online users
  *
  */
 var getOnlineUsers = function() {
@@ -601,10 +600,7 @@ var main = function() {
         $('.right_menu1').show();
         $('.ui.sidebar').sidebar('toggle');
         $('.userHeader').text('');
-        // $('.login_seg').hide();
-        // $('.main_seg').show();
         $('span.userId').empty();
-        // $('.right_menu3').hide();
 
     });
 
@@ -669,7 +665,7 @@ var main = function() {
     });
 
 
-
+    /*FORM VALIDATION USING SEMANTIC UI VALIDATION RULES*/
     $('.login_form').form({
         fields: {
             ulname: {
@@ -709,7 +705,14 @@ var main = function() {
                 rules: [{
                     type: 'email',
                     prompt: 'Please enter a valid email address'
-                }, ]
+                }, 
+                {
+                    type: 'regExp',
+                    //referred from 
+                    //http://stackoverflow.com/questions/16200965/regular-expression-validate-gmail-addresses
+                    value: '/^[a-z0-9](\.?[a-z0-9]){1,}@csu\.fullerton\.edu$/i',
+                    prompt: 'Please enter a valid CSUF email address'
+                }]
             },
             pwd1: {
                 identifier: 'pwd1',
@@ -750,7 +753,6 @@ var main = function() {
     }); //end signup form validation
 
     $('.additem_form').form({
-        // $('.result3').html();
         fields: {
             itemname: {
                 identifier: 'itemname',
@@ -787,7 +789,7 @@ var main = function() {
 
             } //end onSuccess
     }); //end add item form validation
+    /*END FORM VALIDATION */
 }; //end main
-
 
 $(document).ready(main);
