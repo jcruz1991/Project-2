@@ -177,7 +177,6 @@ var removeItem = function(itemToRemove) {
                 console.log('successfully deleted item' + deletedItem);
                 ko.utils.arrayForEach(myViewModel.items(), function(i) {
                     if (i.itemID() == itemToRemove.itemID()) {
-                        console.log('match found kekd');
                         userListViewModel.userItemList.remove(i);
                         myViewModel.items.remove(i);
                         socket.emit('itemDeleted');
@@ -200,7 +199,7 @@ var onSellItem = function(item) {
         contentType: 'application/json',
         url: 'http://localhost:3000/sellItem',
         success: function(sellItem) {
-            console.log('successfully sold item' + sellItem);
+            //succesfully sold item, emit to others
             socket.emit('itemDeleted');
         }
     });
@@ -229,7 +228,6 @@ var callSignUpFunction = function() {
         contentType: 'application/json',
         url: 'http://localhost:3000/signup',
         success: function(data) {
-                console.log('success');
                 $('.result').html(data);
                 $('.signup_form').trigger('reset');
                 $('login_modal').modal('destroy');
@@ -260,14 +258,12 @@ var callLogInFunction = function() {
         contentType: 'application/json',
         url: 'http://localhost:3000/login',
         success: function(data) {
-                console.log('success');
                 if (data.error) {
                     $('.result2').html(data.error);
                     $('.login_form').trigger('reset');
                 } else { //successful log in
                     userG = data.username;
                     //emit new user logged in
-                    console.log('in here bby');
                     socket.emit('newUser', data.username);
 
                     $('.result2').html(data);
@@ -439,14 +435,12 @@ var callShowUserBidOnItems = function() {
  */
 var callShowAllListingsFunction = function() {
     'use strict';
-    console.log('in ajax get');
     $.ajax({
         type: 'GET',
         dataType: 'json',
         contentType: 'application/json',
         url: 'http://localhost:3000/ShowAll',
         success: function(data) {
-                console.log('success');
                 myViewModel.items([]);
                 updateItemView(data.itemList);
 
@@ -468,7 +462,6 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
         contentType: 'application/json',
         url: 'http://localhost:3000/itemInfo',
         success: function(data) {
-                console.log('success');
                 myViewModel.updateAnItem(data);
             } //end success
     }); //end ajax
@@ -500,8 +493,6 @@ var callGetUserInfoFunction = function(item, userName) {
  */
 var updateItemView = function(itemList) {
     'use strict';
-    console.log('itemlist inside update itemview is :');
-    console.log(itemList);
     for (var i = 0; i < itemList.length; i++) {
         myViewModel.addItem(itemList[i]);
     }
@@ -519,7 +510,6 @@ var getOnlineUsers = function() {
         contentType: 'application/json',
         url: 'http://localhost:3000/users',
         success: function(users) {
-                console.log('getONline success: ');
                 for (var i = 0; i < users.length; i++) {
                     $('#onlineUsers').append(
                         $('<div class="small olUser header">').text(users[i]));
@@ -581,12 +571,12 @@ var main = function() {
     });
 
     socket.on('updateListing', function() {
-        console.log('Update listing cus item deleted');
+        // update item list because an item was deleted
         callShowAllListingsFunction();
     });
 
     socket.on('updateItem', function(itemID) {
-        console.log('updateItem' + itemID);
+        // item was update, tell server
         callGetInfoOfOneItemFunction(JSON.stringify({
             'itemID': itemID
         }));
@@ -669,7 +659,6 @@ var main = function() {
 
     // Item Modal
     $('.itemsList').on('click', '.product', function() {
-        console.log('in product click');
         $('.product_modal').modal('show');
     });
 
