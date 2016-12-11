@@ -63,6 +63,10 @@ function BiddingViewModel() {
     self.message = ko.observable();
     self.ID = ko.observable();
 
+    /**
+     *submitBtn funtion for submitting a bid on item. Bid must be higher
+     *than the current bid price.
+     */
     self.submitBtn = function() {
         console.log('submit bidding' + self.newBidPrice());
         var newPrice = self.newBidPrice();
@@ -76,6 +80,10 @@ function BiddingViewModel() {
         }
     }; //end function submitBtn()
 
+    /**
+     *currentProduct function for setting product details.
+     *The new bid price must be higher by 1 from the current bid price.
+     */
     self.currentProduct = function(item) {
         self.Name(item.itemName());
         self.ID(item.itemID());
@@ -225,12 +233,21 @@ function AppViewModel() {
     };
 } //end AppViewModel
 
+/**
+ *knockout viewmodel for updating the online users lists
+ *
+ */
 function UserListViewModel() {
     'use strict';
     var self = this;
     self.userItemList = ko.observableArray();
 } //end userListViewModel()
 
+
+/**
+ *knockout viewmodel for bids user has placed.
+ *
+ */
 function UserBidOnViewModel() {
     'use strict';
     var self = this;

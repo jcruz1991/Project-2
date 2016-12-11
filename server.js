@@ -147,13 +147,19 @@ io.on('connection', function(socket) {
 app.post('/removeItem', function(req, res) {
     console.log('remove item = ');
     //Remove items of the users from the database
-    ItemDb.remove({ _id: req.body._id }, function(err, item) {
+    ItemDb.remove({
+        _id: req.body._id
+    }, function(err, item) {
         if (err) {
             console.log('error while delete an item');
-            res.json({ 'Result': 'Failed' });
+            res.json({
+                'Result': 'Failed'
+            });
         } else {
 
-            res.json({ 'Result': 'successful' });
+            res.json({
+                'Result': 'successful'
+            });
         }
     });
 });
@@ -164,10 +170,15 @@ app.post('/removeItem', function(req, res) {
  */
 app.post('/userInfo', function(req, res) {
     console.log("Get user info");
-    UserDb.findOne({ userName: req.body.userName }, function(err, user) {
+    UserDb.findOne({
+        userName: req.body.userName
+    }, function(err, user) {
         if (user) {
             console.log("Found user " + user.userName);
-            res.json({ 'Result': 'successful', 'email': user.email });
+            res.json({
+                'Result': 'successful',
+                'email': user.email
+            });
         }
     });
 });
@@ -180,17 +191,27 @@ app.post('/sellItem', function(req, res) {
     console.log('sell item = ');
 
     //Find the of the users from the database
-    ItemDb.findOne({ _id: req.body._id }, function(err, item) {
+    ItemDb.findOne({
+        _id: req.body._id
+    }, function(err, item) {
         if (err) {
             console.log('error while finding an item');
-            res.json({ 'Result': 'Failed' });
+            res.json({
+                'Result': 'Failed'
+            });
         } else {
 
             //Got the item, now update the isSold
-            ItemDb.update({ _id: req.body._id }, { isSold: true }, function(err, item) {
+            ItemDb.update({
+                _id: req.body._id
+            }, {
+                isSold: true
+            }, function(err, item) {
                 if (item) {
                     console.log(item);
-                    res.json({ 'Result': 'successful' });
+                    res.json({
+                        'Result': 'successful'
+                    });
                 }
             });
         }
@@ -206,7 +227,9 @@ app.post('/bidOnItem', function(req, res) {
     console.log('user bids on an item');
 
     //Find the item
-    ItemDb.findOne({ _id: req.body.itemID }, function(err, item) {
+    ItemDb.findOne({
+        _id: req.body.itemID
+    }, function(err, item) {
         var userName = req.body.userName;
         var bidPrice = req.body.bidPrice;
         var newTotalBids = item.itemTotalBids + 1;
@@ -214,7 +237,9 @@ app.post('/bidOnItem', function(req, res) {
         iterestedUsers.push(userName);
 
         //Update the item
-        ItemDb.update({ _id: req.body.itemID }, {
+        ItemDb.update({
+            _id: req.body.itemID
+        }, {
             itemCurrentBidPrice: bidPrice,
             itemTotalBids: newTotalBids,
             itemLastBidder: userName,
@@ -222,10 +247,14 @@ app.post('/bidOnItem', function(req, res) {
         }, function(err, success) {
             if (err) {
                 console.log('Error when update item');
-                res.json({ 'Result': 'Failed' });
+                res.json({
+                    'Result': 'Failed'
+                });
             } else {
                 console.log('Successfully updated an item');
-                res.json({ 'Result': 'successful' });
+                res.json({
+                    'Result': 'successful'
+                });
             }
         }); //end function
     }); //end findOne
@@ -237,7 +266,9 @@ app.post('/bidOnItem', function(req, res) {
  *
  */
 app.post('/itemInfo', function(req, res) {
-    ItemDb.findOne({ _id: req.body.itemID }, function(err, item) {
+    ItemDb.findOne({
+        _id: req.body.itemID
+    }, function(err, item) {
         if (item) {
             console.log('Found item' + req.body.itemName);
             res.json(item);
@@ -252,7 +283,9 @@ app.post('/itemInfo', function(req, res) {
  */
 app.post('/signup', function(req, res) {
     console.log('inside post method');
-    UserDb.findOne({ userName: req.body.username }).exec(function(err, user) {
+    UserDb.findOne({
+        userName: req.body.username
+    }).exec(function(err, user) {
         if (!user) {
             var u1 = new UserDb({
                 userName: req.body.username,
@@ -281,17 +314,26 @@ app.post('/signup', function(req, res) {
  */
 app.post('/login', function(req, res) {
     console.log('inside post-login method');
-    UserDb.findOne({ userName: req.body.username1 }).exec(function(err, user) {
+    UserDb.findOne({
+        userName: req.body.username1
+    }).exec(function(err, user) {
         if (!user) {
             console.log('user does not exist' + err);
-            res.json({ 'error': 'user does not exist, please sign up first' });
+            res.json({
+                'error': 'user does not exist, please sign up first'
+            });
         } else {
             if (user.password !== req.body.password1) {
                 console.log('authentication failure');
-                res.json({ 'error': 'authentication failure, please check your details' });
+                res.json({
+                    'error': 'authentication failure, please check your details'
+                });
             } else {
                 console.log('user login successful');
-                res.json({ 'username': req.body.username1, 'userid': user._id });
+                res.json({
+                    'username': req.body.username1,
+                    'userid': user._id
+                });
             }
         }
     }); //end findOne
@@ -331,10 +373,14 @@ app.post('/additems', function(req, res) {
                     //var itemDescription = req.body.itemName;
                     //var itemType = req.body.itemName;
                     var uName;
-                    UserDb.findOne({ _id: req.body.userId }).exec(function(err, user) {
+                    UserDb.findOne({
+                        _id: req.body.userId
+                    }).exec(function(err, user) {
                         if (!user) {
                             console.log('user does not exist' + err);
-                            res.json({ 'error': 'user does not exist, please sign up first' });
+                            res.json({
+                                'error': 'user does not exist, please sign up first'
+                            });
                         } else {
                             uName = user.userName;
                             var i1 = new ItemDb({
@@ -376,10 +422,14 @@ app.post('/additems', function(req, res) {
             //var itemDescription = req.body.itemName;
             //var itemType = req.body.itemName;
             var uName;
-            UserDb.findOne({ _id: req.body.userId }).exec(function(err, user) {
+            UserDb.findOne({
+                _id: req.body.userId
+            }).exec(function(err, user) {
                 if (!user) {
                     console.log('user does not exist' + err);
-                    res.json({ 'error': 'user does not exist, please sign up first' });
+                    res.json({
+                        'error': 'user does not exist, please sign up first'
+                    });
                 } else {
                     uName = user.userName;
                     var i1 = new ItemDb({
@@ -420,16 +470,28 @@ app.post('/additems', function(req, res) {
  */
 app.post('/showListingsFor1User', function(req, res) {
     console.log('in get all listings for 1 user');
-    UserDb.findOne({ _id: req.body.userID }).exec(function(err, user) {
+    UserDb.findOne({
+        _id: req.body.userID
+    }).exec(function(err, user) {
         // user found, look for item
-        ItemDb.find({ mUserId: user._id }, { itemName: 1, itemPrice: 1, itemDescription: 1, itemType: 1, _id: 0 }, function(err, items) {
+        ItemDb.find({
+            mUserId: user._id
+        }, {
+            itemName: 1,
+            itemPrice: 1,
+            itemDescription: 1,
+            itemType: 1,
+            _id: 0
+        }, function(err, items) {
             if (err) {
                 console.log('error while showing listings for 1 user');
                 res.json('error while showing listings for 1 user');
             } else {
                 console.log(items);
                 //res.json({ 'username': req.body.username1, 'userid': user._id, 'itemList': items });
-                res.json({ 'itemList': items });
+                res.json({
+                    'itemList': items
+                });
             }
         }); //end find
     }); //end findOne
@@ -447,7 +509,9 @@ app.get('/ShowAll', function(req, res) {
             res.json('error while getting listing');
         } else {
             console.log('in show all else');
-            res.json({ 'itemList': items });
+            res.json({
+                'itemList': items
+            });
         }
     }); //end find
 }); //end get
