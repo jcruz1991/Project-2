@@ -15,15 +15,17 @@ Submitted by-
 Email- supra.chavan@gmail.com
 */
 
-var socket = io.connect('');    // this variable is required for socket.io
+var socket = io.connect(''); // this variable is required for socket.io
 var myViewModel;
 var biddingViewModel;
+var userListViewModel;
+var userBidOnViewModel;
 var userG = '';
 
 /**
-*Knockout viewmodel for placing bid on listing for logged in user
-*calls function callBidOnItem
-*/
+ *Knockout viewmodel for placing bid on listing for logged in user
+ *calls function callBidOnItem
+ */
 function BiddingViewModel() {
     'use strict';
     var self = this;
@@ -61,9 +63,9 @@ function BiddingViewModel() {
 } //end function BiddingViewModel()
 
 /**
-*knockout viewmodel for displaying/updating listings/items on home page
-*
-*/
+ *knockout viewmodel for displaying/updating listings/items on home page
+ *
+ */
 function ItemViewModel() {
     'use strict';
     var self = this;
@@ -77,6 +79,7 @@ function ItemViewModel() {
     self.itemTotalBids = ko.observable(0);
     self.itemLastBidder = ko.observable('');
     self.isSold = ko.observable(false);
+    self.interestedUsers = ko.observableArray();
     self.biddingBtn = function() {
         if (userG === '') {
             alert('Please log in first before bidding');
@@ -85,6 +88,17 @@ function ItemViewModel() {
             $('.bidding-modal').modal('show');
         }
     }; //end function biddingBtn()
+
+    self.deleteItem = function() {
+        console.log('delete item clicked');
+        removeItem(self);
+    };
+
+    self.sellBtn = function() {
+        console.log("sell item");
+        onSellItem(self);
+        self.isSold(true);
+    };
 
     self.newItem = function(item) {
         self.itemName(item.itemName);
@@ -97,6 +111,7 @@ function ItemViewModel() {
         self.itemTotalBids(item.itemTotalBids);
         self.itemLastBidder(item.itemLastBidder);
         self.isSold(item.isSold);
+        self.interestedUsers(item.mInterestedUsers);
     }; //end function newItem()
 
     self.updateItem = function(item) {
@@ -104,23 +119,14 @@ function ItemViewModel() {
         self.itemLastBidder(item.itemLastBidder);
         self.itemTotalBids(item.itemTotalBids);
         self.isSold(item.isSold);
+        self.interestedUsers(item.mInterestedUsers);
     }; //end function updateItem()
-    self.deleteItem = function() {
-        console.log('delete item clicked');
-        removeItem(self);
-    };
-
-    self.sellBtn = function() {
-        console.log("sell item");
-        onSellItem(self);
-        self.isSold(true);
-    };
-} //end ItemViewModel
+}; //end ItemViewModel
 
 /**
-*knockout viewmodel for updating the list of products/listings
-*
-*/
+ *knockout viewmodel for updating the list of products/listings
+ *
+ */
 function AppViewModel() {
     'use strict';
     var self = this;
@@ -140,17 +146,21 @@ function AppViewModel() {
             }
         });
     };
-} //end AppViewModel
+}; //end AppViewModel
 
-function userListViewModel() {
+function UserListViewModel() {
     var self = this;
     self.userItemList = ko.observableArray();
-} //end userListViewModel()
+}; //end userListViewModel()
 
+function UserBidOnViewModel() {
+    var self = this;
+    self.bidItemList = ko.observableArray();
+}
 /**
-*Delete listing functionality for a logged in user
-*
-*/
+ *Delete listing functionality for a logged in user
+ *
+ */
 var removeItem = function(itemToRemove) {
     var itemToDelete = JSON.stringify({ '_id': itemToRemove.itemID() });
     console.log('inside removeItem');
@@ -161,23 +171,23 @@ var removeItem = function(itemToRemove) {
         contentType: 'application/json',
         url: 'http://localhost:3000/removeItem',
         success: function(deletedItem) {
-            console.log('successfully deleted item' + deletedItem);
-            ko.utils.arrayForEach(myViewModel.items(), function(i) {
-                if (i.itemID() == itemToRemove.itemID()) {
-                    console.log('match found kekd');
-                    userListViewModel.userItemList.remove(i);
-                    myViewModel.items.remove(i);
-                    socket.emit('itemDeleted');
-                }
-            }); //end arrayForEach
-        } //end success
+                console.log('successfully deleted item' + deletedItem);
+                ko.utils.arrayForEach(myViewModel.items(), function(i) {
+                    if (i.itemID() == itemToRemove.itemID()) {
+                        console.log('match found kekd');
+                        userListViewModel.userItemList.remove(i);
+                        myViewModel.items.remove(i);
+                        socket.emit('itemDeleted');
+                    }
+                }); //end arrayForEach
+            } //end success
     }); //end ajax
 }; //end removeItem
 
 /**
-*
-*
-*/
+ *
+ *
+ */
 var onSellItem = function(item) {
 
     var itemToSell = JSON.stringify({ '_id': item.itemID() });
@@ -281,9 +291,9 @@ var callLogInFunction = function() {
 
 
 /**
-*
-*
-*/
+ *
+ *
+ */
 var callBidOnItem = function(item) {
     'use strict';
     var jsonStr = JSON.stringify({
@@ -306,9 +316,9 @@ var callBidOnItem = function(item) {
 }; //end callBidOnItem
 
 /**
-*
-*
-*/
+ *
+ *
+ */
 var callAddItemFunction = function() {
     'use strict';
 
@@ -388,6 +398,37 @@ var callShowListingsFor1User = function(jsonStr) {
 }; //end callShowListingsFor1User
 
 /**
+ * Displays all items that user is bidded on, for logged in user
+ * Input- user id in JSON format as argument jsonStr
+ */
+var callShowUserBidOnItems = function() {
+    'use strict';
+    // $('.movie_seg').empty();
+    userBidOnViewModel.bidItemList([]);
+    ko.utils.arrayForEach(myViewModel.items(), function(i) {
+        if (i.interestedUsers() !== null) {
+            var index = 0;
+            for (index; index < i.interestedUsers().length; index++) {
+                if (i.interestedUsers()[index] === userG) {
+                    if (i.isSold()) {
+                        if (i.itemLastBidder() === userG) {
+                            i.Message = "You have won the item. Contact " + i.mUserName();
+                        } else {
+                            i.Message = "You have lost the item."
+                        }
+                    } else {
+                        i.Message = "Item is still on sale";
+                    }
+                    userBidOnViewModel.bidItemList.push(i);
+                    break;
+                }
+            }
+        }
+    });
+
+}; //end callShowUserBidOnItems
+
+/**
  * Displays all posted listings
  * Input- None
  * Output- on success, returns listing information as data
@@ -412,9 +453,9 @@ var callShowAllListingsFunction = function() {
 }; //end callShowAllListingsFunction
 
 /**
-*
-*
-*/
+ *
+ *
+ */
 var callGetInfoOfOneItemFunction = function(jsonStr) {
     'use strict';
     $.ajax({
@@ -431,9 +472,9 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
 }; //end callGetInfoOfOneItemFunction
 
 /**
-*
-*
-*/
+ *
+ *
+ */
 var updateItemView = function(itemList) {
     'use strict';
     console.log('itemlist inside update itemview is :');
@@ -444,9 +485,9 @@ var updateItemView = function(itemList) {
 }; //end updateItemView
 
 /**
-*
-*
-*/
+ *
+ *
+ */
 var getOnlineUsers = function() {
     'use strict';
     $.ajax({
@@ -474,9 +515,13 @@ var main = function() {
     biddingViewModel = new BiddingViewModel();
     ko.applyBindings(biddingViewModel, document.getElementById('biddingModal'));
 
-    userListViewModel = new userListViewModel();
+    userListViewModel = new UserListViewModel();
     ko.applyBindings(userListViewModel,
         document.getElementById('listOfUsersItems'));
+
+    userBidOnViewModel = new UserBidOnViewModel();
+    ko.applyBindings(userBidOnViewModel,
+        document.getElementById('itemsbidonList'));
 
 
     // maybe change this to getlistings from online
@@ -576,12 +621,7 @@ var main = function() {
     $('.viewItemsBidOn').click(function() {
         $('.itemsbidon-modal').modal('show');
 
-        // var userID = $('span.userId').text();
-        // var jsonStr = JSON.stringify({
-        //     'userID': userID
-        // });
-        // callShowListingsFor1User(jsonStr);
-        // // $('.movie_seg').show();
+        callShowUserBidOnItems();
     });
 
     $('.signup').click(function() {
