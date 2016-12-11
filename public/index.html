@@ -13,6 +13,7 @@ Email- supra.chavan@gmail.com
 -->
 
 <html>
+
 <head>
     <title>Titan-bay</title>
     <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
@@ -226,7 +227,7 @@ Email- supra.chavan@gmail.com
                         <textarea class="itemDescription" rows="3" placeholder="Enter description for product"></textarea>
                     </div>
                     <div class="field">
-                    	<label>Upload Image (Optional but recommended)</label>
+                        <label>Upload Image (Optional but recommended)</label>
                         <input type="file" id="image" name="image" accept="Image/*" class="itemImage">
                     </div>
                     <div class="field">
@@ -251,28 +252,28 @@ Email- supra.chavan@gmail.com
                     <h2 class="ui teal header" data-bind='text: itemName'>PRODUCT 1</h2>
                     <div class="meta">
                         <div>
-                            <h3 class="ui gray header">Price: $ 
+                            <h3 class="ui gray header">Price: $
                             	<span data-bind='text: itemPrice'></span>
                             </h3>
                         </div>
                     </div>
                 </div>
                 <div class="extra content">
-                	<h5 class="ui gray postedBy header">Posted By : 
+                    <h5 class="ui gray postedBy header">Posted By :
                 		<span data-bind='text: mUserName'></span>
                     </h5>
-                	<h5 class="ui gray description header">
+                    <h5 class="ui gray description header">
                     	Description: <span data-bind='text: itemDescription'></span>
                     </h5>
                 </div>
                 <div class='extra content biddingSection'>
                     <div data-bind='ifnot: isSold'>
-                    	<div class="ui right labeled button" tabindex="0">
-                    		<div class='totalBidders ui basic right pointing label'>
+                        <div class="ui right labeled button" tabindex="0">
+                            <div class='totalBidders ui basic right pointing label'>
                                 <span data-bind='text: itemTotalBids'></span> Bids
                             </div>
                             <div class="ui bid teal button" data-bind='click: biddingBtn'>Place Bid</div>
-                    	</div>
+                        </div>
                     </div>
                     <h3 class='ui teal itemSold header' data-bind='visible: isSold'>Status: Sold Out</h3>
                 </div>
@@ -296,7 +297,7 @@ Email- supra.chavan@gmail.com
             <div class="actions">
                 <div class="ui bid teal button">Bid</div>
                 <div class="ui buyItem positive right labeled icon button">Buy
-                	<i class="cart icon"></i>
+                    <i class="cart icon"></i>
                 </div>
             </div>
         </div>
@@ -308,10 +309,10 @@ Email- supra.chavan@gmail.com
                 <div class="ui large center aligned header" data-bind='text: Name'>Item Name</div>
                 <div class="item">
                     <div class="content">
-                    	<h4 class="ui gray header">Last Bidder: 
+                        <h4 class="ui gray header">Last Bidder:
                             <span data-bind='text: lastBidder'></span>
-                        </h4> 
-                    	<h4 class="ui gray header">Current Bidding Price: $
+                        </h4>
+                        <h4 class="ui gray header">Current Bidding Price: $
                             <span data-bind='text: currentBidPrice'></span>
                         </h4>
                     </div>
@@ -337,7 +338,7 @@ Email- supra.chavan@gmail.com
                             <h4 class="ui gray usersItemsListing header" data-bind="text: itemName"></h4>
                         </div>
                         <div class="two wide column">
-                            <h4 class="ui gray header">Bids: 
+                            <h4 class="ui gray header">Bids:
                             	<span class="currBids" data-bind='text: itemTotalBids'></span>
                             </h4>
                         </div>
@@ -351,7 +352,7 @@ Email- supra.chavan@gmail.com
                                 <button class="ui right floated teal button" data-bind='click: sellBtn'>Sell</button>
                             </div>
                             <div class='itemSold' data-bind='visible: isSold'>
-                                 <h4 class="ui gray header">Sold to:
+                                <h4 class="ui gray header">Sold to:
                                 	<span data-bind='text: itemLastBidder'></span>
                                 	<span data-bind='text: email'></span>
                                 </h4>
@@ -378,13 +379,13 @@ Email- supra.chavan@gmail.com
                             <h4 class="ui usersItemsListing header" data-bind="text: itemName"></h4>
                         </div>
                         <div class="seven wide column">
-                            <h4 class="ui header">Status: 
+                            <h4 class="ui header">Status:
                             	<span class="currBids" data-bind="text: Message"></span>
                             	<span data-bind="text: email"></span>
                             </h4>
                         </div>
                         <div class="three wide column">
-                        	 <div data-bind='ifnot: isSold'>
+                            <div data-bind='ifnot: isSold'>
                                 <div class="ui bid teal button" data-bind='click: biddingBtn'>Place Bid</div>
                             </div>
                         </div>

@@ -91,7 +91,9 @@ function BiddingViewModel() {
  */
 var removeItem = function(itemToRemove) {
     'use strict';
-    var itemToDelete = JSON.stringify({ '_id': itemToRemove.itemID() });
+    var itemToDelete = JSON.stringify({
+        '_id': itemToRemove.itemID()
+    });
     console.log('inside removeItem');
     $.ajax({
         type: 'POST',
@@ -113,22 +115,24 @@ var removeItem = function(itemToRemove) {
 }; //end removeItem
 
 /**
- *Functionality to sell item/listing called on sellBtn click 
+ *Functionality to sell item/listing called on sellBtn click
  *
  */
 var onSellItem = function(item) {
     'use strict';
-    var itemToSell = JSON.stringify({ '_id': item.itemID() });
+    var itemToSell = JSON.stringify({
+        '_id': item.itemID()
+    });
     $.ajax({
         type: 'POST',
         data: itemToSell,
         dataType: 'json',
         contentType: 'application/json',
         url: 'http://localhost:3000/sellItem',
-        success: function(sellItem) {
-            //succesfully sold item, emit to others
-            socket.emit('itemDeleted');
-        } //end success
+        success: function() {
+                //succesfully sold item, emit to others
+                socket.emit('itemDeleted');
+            } //end success
     }); //end ajax
 }; //end onSellItem
 
@@ -342,9 +346,9 @@ var callAddItemFunction = function() {
     }
     formData.append('itemBidPrice', itemBidPrice);
 
+    var error = 0;
     if (file) {
         formData.append('itemImage', file.name);
-        var error = 0;
         if (!file.type.match('image.*')) {
             console.log('<p> Images only. Select another file</p>');
             error = 1;
@@ -385,7 +389,9 @@ var callAddItemFunction = function() {
  */
 var callGetUserInfoFunction = function(item, userName) {
     'use strict';
-    var jsonStr = JSON.stringify({ 'userName': userName });
+    var jsonStr = JSON.stringify({
+        'userName': userName
+    });
     $.ajax({
         type: 'POST',
         data: jsonStr,
@@ -402,7 +408,7 @@ var callGetUserInfoFunction = function(item, userName) {
  * Displays all items in user's list, for logged in user
  * Input- user id in JSON format as argument jsonStr
  */
-var callShowListingsFor1User = function(jsonStr) {
+var callShowListingsFor1User = function() {
     'use strict';
     userListViewModel.userItemList([]);
     ko.utils.arrayForEach(myViewModel.items(), function(i) {
@@ -430,7 +436,7 @@ var callShowUserBidOnItems = function() {
                     if (i.isSold()) {
                         if (i.itemLastBidder() === userG) {
                             i.Message = 'You have won the item. Contact ' +
-                              i.mUserName();
+                                i.mUserName();
                             callGetUserInfoFunction(i, i.mUserName());
                         } else {
                             i.Message = 'You have lost the item.';
@@ -619,11 +625,7 @@ var main = function() {
     $('.viewListing').click(function() {
         $('.usersListings-modal').modal('show');
 
-        var userID = $('span.userId').text();
-        var jsonStr = JSON.stringify({
-            'userID': userID
-        });
-        callShowListingsFor1User(jsonStr);
+        callShowListingsFor1User();
         // $('.movie_seg').show();
     });
 
@@ -705,10 +707,9 @@ var main = function() {
                 rules: [{
                     type: 'email',
                     prompt: 'Please enter a valid email address'
-                }, 
-                {
+                }, {
                     type: 'regExp',
-                    //referred from 
+                    //referred from
                     //http://stackoverflow.com/questions/16200965/regular-expression-validate-gmail-addresses
                     value: '/^[a-z0-9](\.?[a-z0-9]){1,}@csu\.fullerton\.edu$/i',
                     prompt: 'Please enter a valid CSUF email address'
