@@ -15,12 +15,15 @@ Submitted by-
 Email- supra.chavan@gmail.com
 */
 
-// this variable is required for socket.io
-var socket = io.connect('');
+var socket = io.connect('');    // this variable is required for socket.io
 var myViewModel;
 var biddingViewModel;
 var userG = '';
 
+/**
+*Knockout viewmodel for placing bid on listing for logged in user
+*calls function callBidOnItem
+*/
 function BiddingViewModel() {
     'use strict';
     var self = this;
@@ -57,6 +60,10 @@ function BiddingViewModel() {
 
 } //end function BiddingViewModel()
 
+/**
+*knockout viewmodel for displaying/updating listings/items on home page
+*
+*/
 function ItemViewModel() {
     'use strict';
     var self = this;
@@ -110,6 +117,10 @@ function ItemViewModel() {
     };
 } //end ItemViewModel
 
+/**
+*knockout viewmodel for updating the list of products/listings
+*
+*/
 function AppViewModel() {
     'use strict';
     var self = this;
@@ -137,12 +148,9 @@ function userListViewModel() {
 } //end userListViewModel()
 
 /**
- * Sign up functionality for first time user
- * Submits sign up form data to server as JSON
- * Input- Username, Email address, password
- * Output- on success, returns JSON message that user is added successfully.
- */
-
+*Delete listing functionality for a logged in user
+*
+*/
 var removeItem = function(itemToRemove) {
     var itemToDelete = JSON.stringify({ '_id': itemToRemove.itemID() });
     console.log('inside removeItem');
@@ -161,12 +169,15 @@ var removeItem = function(itemToRemove) {
                     myViewModel.items.remove(i);
                     socket.emit('itemDeleted');
                 }
-            });
-        }
-    });
-};
+            }); //end arrayForEach
+        } //end success
+    }); //end ajax
+}; //end removeItem
 
-
+/**
+*
+*
+*/
 var onSellItem = function(item) {
 
     var itemToSell = JSON.stringify({ '_id': item.itemID() });
@@ -184,6 +195,12 @@ var onSellItem = function(item) {
     });
 };
 
+/**
+ * Sign up functionality for first time user
+ * Submits sign up form data to server as JSON
+ * Input- Username, Email address, password
+ * Output- on success, returns JSON message that user is added successfully.
+ */
 var callSignUpFunction = function() {
     'use strict';
     var uname = document.getElementsByName('uname')[0].value;
@@ -262,45 +279,11 @@ var callLogInFunction = function() {
     }); //end ajax
 }; //end callLogInFunction
 
+
 /**
- *
- */
-var callAddItemFunctionOld = function() {
-    'use strict';
-
-    var itemName = document.getElementsByName('itemname')[0].value;
-    var itemPrice = document.getElementsByName('itemprice')[0].value;
-    var itemDescription = $('.itemDescription').val();
-    var itemType = $('.selectType option:selected').text();
-    var userID = $('span.userId').text();
-    console.log(userID);
-    console.log('type: ' + itemType);
-    var jsonStr = JSON.stringify({
-        'itemName': itemName,
-        'itemPrice': itemPrice,
-        'itemDescription': itemDescription,
-        'itemType': itemType,
-        'userId': userID
-    });
-    $.ajax({
-        type: 'POST',
-        data: jsonStr,
-        dataType: 'json',
-        contentType: 'application/json',
-        url: 'http://localhost:3000/additems',
-        success: function(data) {
-                // emit new item
-                console.log('item added: ' + data.itemName);
-
-                socket.emit('newItemAdded', data);
-                console.log(data.itemId);
-                $('.result3').html(data);
-                $('.additem_form').trigger('reset');
-                $('.result3').html();
-            } //end success
-    }); //end ajax
-}; //end callAddItemFunctionOld
-
+*
+*
+*/
 var callBidOnItem = function(item) {
     'use strict';
     var jsonStr = JSON.stringify({
@@ -322,7 +305,10 @@ var callBidOnItem = function(item) {
     }); //end ajax
 }; //end callBidOnItem
 
-
+/**
+*
+*
+*/
 var callAddItemFunction = function() {
     'use strict';
 
@@ -425,6 +411,10 @@ var callShowAllListingsFunction = function() {
     }); //end ajax
 }; //end callShowAllListingsFunction
 
+/**
+*
+*
+*/
 var callGetInfoOfOneItemFunction = function(jsonStr) {
     'use strict';
     $.ajax({
@@ -440,7 +430,10 @@ var callGetInfoOfOneItemFunction = function(jsonStr) {
     }); //end ajax
 }; //end callGetInfoOfOneItemFunction
 
-
+/**
+*
+*
+*/
 var updateItemView = function(itemList) {
     'use strict';
     console.log('itemlist inside update itemview is :');
@@ -450,6 +443,10 @@ var updateItemView = function(itemList) {
     }
 }; //end updateItemView
 
+/**
+*
+*
+*/
 var getOnlineUsers = function() {
     'use strict';
     $.ajax({
@@ -574,6 +571,17 @@ var main = function() {
         });
         callShowListingsFor1User(jsonStr);
         // $('.movie_seg').show();
+    });
+
+    $('.viewItemsBidOn').click(function() {
+        $('.itemsbidon-modal').modal('show');
+
+        // var userID = $('span.userId').text();
+        // var jsonStr = JSON.stringify({
+        //     'userID': userID
+        // });
+        // callShowListingsFor1User(jsonStr);
+        // // $('.movie_seg').show();
     });
 
     $('.signup').click(function() {
