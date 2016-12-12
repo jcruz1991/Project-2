@@ -729,7 +729,7 @@ var main = function() {
                     //referred from
                     //http://stackoverflow.com/questions/16200965/regular-expression-validate-gmail-addresses
                     value: '/^[a-z0-9](\.?[a-z0-9]){1,}@csu\.fullerton\.edu$/i',
-                    prompt: 'Please enter a valid CSUF email address'
+                    prompt: 'Please enter a valid CSUF email address, e.g. in the format- xx@csu.fullerton.edu'
                 }]
             },
             pwd1: {
